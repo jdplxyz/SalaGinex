@@ -29,8 +29,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Sirve los archivos estáticos de la carpeta build de React
-app.use(express.static(path.join(__dirname, "build")));
+// Sirve los archivos estáticos de la carpeta dist de Vite
+app.use(express.static(path.join(__dirname, "dist")));
 
 // Rutas de la API
 app.use(usuariosRoute);
@@ -43,5 +43,6 @@ app.post("/reservacion", addReservation);
 
 // Maneja todas las demás rutas y sirve el archivo index.html
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
+  console.log("Serving index.html for route:", req.path); // Depuración
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
