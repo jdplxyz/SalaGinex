@@ -29,19 +29,19 @@ export const Hero = () => {
         <div className="flex flex-col sm:flex-row gap-4 absolute top-[50%] sm:top-[60%] lg:top-[48%] xl:top-[45%] 2xl:top-[40%]">
           {isAuthenticated ? ( // Si el usuario está autenticado
             typeClient === "Cliente" ? ( // Verifica el rol del usuario
-              <a
+              <Link
                 className="text-lg md:text-xl lg:text-2xl text-center border border-white px-6 py-3 rounded-full transition ease-in duration-300 hover:bg-white hover:text-black font-bold sm:p-[25px]"
-                href="/inicio"
+                to="/inicio"
               >
                 Comprar Ticket
-              </a>
+              </Link>
             ) : (
-              <a
+              <Link
                 className="text-lg md:text-xl lg:text-2xl text-center border border-white px-6 py-3 rounded-full transition ease-in duration-300 hover:bg-white hover:text-black font-bold sm:p-[25px]"
-                href="/dashboard"
+                to="/dashboard"
               >
                 Dashboard
-              </a>
+              </Link>
             )
           ) : ( // Si el usuario no está autenticado
             <Link
