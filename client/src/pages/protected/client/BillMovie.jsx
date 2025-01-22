@@ -138,7 +138,7 @@ export const BillMovie = () => {
 
         const token = localStorage.getItem('token');
 
-        const response = await fetch('http://salaginex.onrender.com/reservacion', {
+        const response = await fetch('https://salaginex.onrender.com/reservacion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
