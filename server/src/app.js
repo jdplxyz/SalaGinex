@@ -26,3 +26,6 @@ app.use(reservacionRoute);
 
 app.post("/peliculas", upload.single("posterImg"), addMovie);
 app.post("/reservacion", addReservation);
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
