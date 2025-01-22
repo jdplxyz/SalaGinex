@@ -84,7 +84,7 @@ export const Register = async (req, res) => {
       .input("apellido", sql.VarChar, apellido)
       .input("correo_electronico", sql.VarChar, correo_electronico)
       .input("clave", sql.Text, hashedPassword)
-      .input("rol", sql.VarChar, rol || 'Admin')
+      .input("rol", sql.VarChar, rol || "Cliente")
       .query(
         "INSERT INTO Administrador.Usuario(nombre, apellido, correo_electronico, clave, rol) VALUES (@nombre, @apellido, @correo_electronico, @clave, @rol)"
       );
@@ -141,48 +141,54 @@ export const getUserByEmail = async (req, res) => {
   }
 };
 
-export const deleteUserById = async(req,res) =>{
-  const {id} = req.params;
-  try{
-    const pool  = await connectDatabase()
+export const deleteUserById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const pool = await connectDatabase();
     const result = await pool
-    .request()
-    .input('id_usuario',sql.Int,id)
-    .query('DELETE FROM Administrador.Usuario WHERE id_usuario = @id_usuario')
-    res.status(200).json({message:'Cliente elimnado.'})
-  }catch(error){
-    res.status(401).res.json({error:"Error al eliminar cliente"})
+      .request()
+      .input("id_usuario", sql.Int, id)
+      .query(
+        "DELETE FROM Administrador.Usuario WHERE id_usuario = @id_usuario"
+      );
+    res.status(200).json({ message: "Cliente elimnado." });
+  } catch (error) {
+    res.status(401).res.json({ error: "Error al eliminar cliente" });
   }
-
-}
+};
 export const updateUserById = async (req, res) => {
   const { id } = req.params;
   const { name, apellido, email } = req.body;
 
   if (!name || !apellido || !email) {
-    return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+    return res
+      .status(400)
+      .json({ error: "Todos los campos son obligatorios." });
   }
 
   try {
     const pool = await connectDatabase();
     const result = await pool
       .request()
-      .input('id_usuario', sql.Int, id)
-      .input('nombre', sql.VarChar, name)
-      .input('apellido', sql.VarChar, apellido)
-      .input('correo_electronico', sql.VarChar, email)
-      .query(`
+      .input("id_usuario", sql.Int, id)
+      .input("nombre", sql.VarChar, name)
+      .input("apellido", sql.VarChar, apellido)
+      .input("correo_electronico", sql.VarChar, email).query(`
         UPDATE Administrador.Usuario 
         SET nombre = @nombre, apellido = @apellido, correo_electronico = @correo_electronico 
         WHERE id_usuario = @id_usuario
       `);
     if (result.rowsAffected > 0) {
-      return res.json({ message: 'Cliente actualizado correctamente.' });
+      return res.json({ message: "Cliente actualizado correctamente." });
     } else {
-      return res.status(404).json({ message: 'No se encontró el cliente para actualizar.' });
+      return res
+        .status(404)
+        .json({ message: "No se encontró el cliente para actualizar." });
     }
   } catch (error) {
-    return res.status(500).json({ error: 'Error al actualizar cliente.', details: error.message });
+    return res
+      .status(500)
+      .json({ error: "Error al actualizar cliente.", details: error.message });
   }
 };
 
@@ -213,36 +219,50 @@ export const verifyToken = (req, res, next) => {
 
 export const getUsersWithReservations = async (req, res) => {
   try {
-      const pool = await connectDatabase(); 
+    const pool = await connectDatabase();
 
-    
-      const reservationsResult = await pool
-          .request()
-          .query('SELECT id_usuario FROM Administrador.Reservacion WHERE confirmado = 1');
+    const reservationsResult = await pool
+      .request()
+      .query(
+        "SELECT id_usuario FROM Administrador.Reservacion WHERE confirmado = 1"
+      );
 
-  
-      if (reservationsResult.recordset.length === 0) {
-          return res.status(404).json({ message: "No se encontraron reservaciones confirmadas." });
-      }
+    if (reservationsResult.recordset.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No se encontraron reservaciones confirmadas." });
+    }
 
+    const userIds = reservationsResult.recordset.map(
+      (reservation) => reservation.id_usuario
+    );
 
-      const userIds = reservationsResult.recordset.map(reservation => reservation.id_usuario);
+    const usersResult = await pool
+      .request()
+      .query(
+        `SELECT * FROM Administrador.Usuario WHERE id_usuario IN (${userIds.join(
+          ","
+        )})`
+      );
 
-
-      const usersResult = await pool
-          .request()
-          .query(`SELECT * FROM Administrador.Usuario WHERE id_usuario IN (${userIds.join(',')})`);
-
-  
-      if (usersResult.recordset.length === 0) {
-          return res.status(404).json({ message: "No se encontraron usuarios con reservaciones confirmadas." });
-      }
-      res.status(200).json({
-          message: "Usuarios con reservaciones confirmadas obtenidos correctamente.",
-          data: usersResult.recordset, 
-      });
+    if (usersResult.recordset.length === 0) {
+      return res
+        .status(404)
+        .json({
+          message: "No se encontraron usuarios con reservaciones confirmadas.",
+        });
+    }
+    res.status(200).json({
+      message:
+        "Usuarios con reservaciones confirmadas obtenidos correctamente.",
+      data: usersResult.recordset,
+    });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error al obtener los usuarios con reservaciones confirmadas." }); // Enviar un mensaje de error al cliente
+    console.error(error);
+    res
+      .status(500)
+      .json({
+        message: "Error al obtener los usuarios con reservaciones confirmadas.",
+      }); // Enviar un mensaje de error al cliente
   }
 };
