@@ -22,7 +22,7 @@ export const Invoices = () => {
     const getOrdenConfirmated = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:1234/orden');
+            const response = await fetch('http://salaginex.onrender.com/orden');
             if (!response.ok) {
                 throw new Error('Error al obtener los datos');
             }
@@ -40,7 +40,7 @@ export const Invoices = () => {
 
     const getUsersWithReservations = async () => {
         try {
-            const response = await fetch('http://localhost:1234/users/reservacion');
+            const response = await fetch('http://salaginex.onrender.com/users/reservacion');
             const data = await response.json();
             if (!response.ok) {
                 console.log('Error al obtener usuarios con reservaciones');
@@ -53,7 +53,7 @@ export const Invoices = () => {
 
     const getMoviesWithReservations = async () => {
         try {
-            const response = await fetch('http://localhost:1234/peliculas/reservacion');
+            const response = await fetch('http://salaginex.onrender.com/peliculas/reservacion');
             const data = await response.json();
             if (!response.ok) {
                 console.log('Error al obtener películas con reservaciones');

@@ -44,12 +44,12 @@ export const Hero = () => {
               </a>
             )
           ) : ( // Si el usuario no está autenticado
-            <a
+            <Link
               className="text-lg md:text-xl lg:text-2xl text-center border border-white px-6 py-3 rounded-full transition ease-in duration-300 hover:bg-white hover:text-black font-bold sm:p-[25px]"
-              href="/login"
+              to="/login"
             >
               Iniciar Sesión
-            </a>
+            </Link>
           )}
 
           

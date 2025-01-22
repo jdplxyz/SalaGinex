@@ -1,6 +1,6 @@
 import { connectDatabase } from "../database/database.js";
 import { userSchema } from "../schemas/ValidationUser.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import sql from "mssql";
 import { config } from "dotenv";
 config({ path: "./.env" });

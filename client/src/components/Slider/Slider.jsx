@@ -11,7 +11,7 @@ export const Slider = () => {
 
   const getAllMovies = async () => {
     try {
-      const response = await fetch("http://localhost:1234/peliculas");
+      const response = await fetch("http://salaginex.onrender.com/peliculas");
       if (!response.ok) {
         throw new Error("Error al obtener las películas");
       }
