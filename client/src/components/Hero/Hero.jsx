@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../../utils/AuthContext"; 
-
+import { Link } from "react-router-dom";
 export const Hero = () => {
   const { isAuthenticated } = useContext(AuthContext); 
   const typeClient = localStorage.getItem("rol"); // Obtén el rol del usuario
