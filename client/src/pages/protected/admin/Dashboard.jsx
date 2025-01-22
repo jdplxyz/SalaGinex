@@ -19,7 +19,7 @@ export const Dashboard = () => {
 
     const getUserData = async () => {
         try {
-            const response = await fetch("http://salaginex.onrender.com/users");
+            const response = await fetch("https://salaginex.onrender.com/users");
             const data = await response.json();
             if (!response.ok) {
                 console.log("error");
@@ -32,7 +32,7 @@ export const Dashboard = () => {
 
     const getOrdenConfirmated = async () => {
         try {
-            const response = await fetch('http://salaginex.onrender.com/orden');
+            const response = await fetch('https://salaginex.onrender.com/orden');
             const data = await response.json();
             if (!response.ok) {
                 console.log("error");

@@ -32,7 +32,7 @@ export const Register = () => {
   const handleSubmit = async (e) =>{
     e.preventDefault()
     try{
-      const response = await fetch("http://salaginex.onrender.com/register",{
+      const response = await fetch("https://salaginex.onrender.com/register",{
         method:'POST',
         headers:{
           "Content-Type":"application/json"

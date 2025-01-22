@@ -28,7 +28,7 @@ export const Movies = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch("http://salaginex.onrender.com/peliculas");
+      const response = await fetch("https://salaginex.onrender.com/peliculas");
       if (!response.ok) {
         throw new Error("Error al obtener las películas");
       }
@@ -54,13 +54,13 @@ export const Movies = () => {
   const handleDeleteMovie = async (client) => {
     const { id_pelicula } = client;
     try {
-      const response = await fetch(`http://salaginex.onrender.com/pelicula/${id_pelicula}`, {
+      const response = await fetch(`https://salaginex.onrender.com/pelicula/${id_pelicula}`, {
         method: "DELETE",
       });
       if (response.ok) {
         setMessage("Película eliminada correctamente.");
         setOpenMessageModal(!openMessageModal);
-        const updatedResponse = await fetch("http://salaginex.onrender.com/peliculas");
+        const updatedResponse = await fetch("https://salaginex.onrender.com/peliculas");
         const updatedMovies = await updatedResponse.json();
         if (updatedMovies) {
           setDataMovie(updatedMovies.data);
@@ -87,7 +87,7 @@ export const Movies = () => {
 
     try {
       const response = await fetch(
-        `http://salaginex.onrender.com/peliculas/${selectedMovie.id_pelicula}`,
+        `https://salaginex.onrender.com/peliculas/${selectedMovie.id_pelicula}`,
         {
           method: "PUT",
           headers: {
@@ -156,13 +156,13 @@ export const Movies = () => {
     formData.append("posterImg", newMovie.poster);
 
     try {
-      const response = await fetch("http://salaginex.onrender.com/peliculas", {
+      const response = await fetch("https://salaginex.onrender.com/peliculas", {
         method: "POST",
         body: formData,
       });
 
       if (response.ok) {
-        const updatedResponse = await fetch("http://salaginex.onrender.com/peliculas");
+        const updatedResponse = await fetch("https://salaginex.onrender.com/peliculas");
         const updatedData = await updatedResponse.json();
         setDataMovie(updatedData);
         setMessage("Película agregada correctamente.");

@@ -31,7 +31,7 @@ export const ClientAdmin = () => {
   }, [errorMessage, message]);
 
   useEffect(() => {
-    fetch("http://salaginex.onrender.com/users")
+    fetch("https://salaginex.onrender.com/users")
       .then((response) => response.json())
       .then((clients) => {
         setData(clients.data);
@@ -52,7 +52,7 @@ export const ClientAdmin = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://salaginex.onrender.com/register", {
+      const response = await fetch("https://salaginex.onrender.com/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +65,7 @@ export const ClientAdmin = () => {
       if (response.ok) {
         setMessage("Usuario registrado");
         setIsModalRegisterOpen(!isModalRegisterOpen);
-        const updatedResponse = await fetch("http://salaginex.onrender.com/users");
+        const updatedResponse = await fetch("https://salaginex.onrender.com/users");
         const updatedData = await updatedResponse.json();
         if (updatedData.data) {
           setData(updatedData.data);
@@ -82,7 +82,7 @@ export const ClientAdmin = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://salaginex.onrender.com/usersByEmail", {
+      const response = await fetch("https://salaginex.onrender.com/usersByEmail", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -126,7 +126,7 @@ export const ClientAdmin = () => {
       email: userSelected.correo_electronico,
     };
     try {
-      const response = await fetch(`http://salaginex.onrender.com/users/${userSelected.id_usuario}`, {
+      const response = await fetch(`https://salaginex.onrender.com/users/${userSelected.id_usuario}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -136,7 +136,7 @@ export const ClientAdmin = () => {
       if (response.ok) {
         setMessage("Cliente actualizado satisfactoriamente.");
         setIsModalEditOpen(false);
-        const updatedResponse = await fetch("http://salaginex.onrender.com/users");
+        const updatedResponse = await fetch("https://salaginex.onrender.com/users");
         const updatedData = await updatedResponse.json();
         if (updatedData.data) {
           setData(updatedData.data);
@@ -150,12 +150,12 @@ export const ClientAdmin = () => {
   const handleDeleteClient = async (client) => {
     const id = client.id_usuario;
     try {
-      const response = await fetch(`http://salaginex.onrender.com/users/${id}`, {
+      const response = await fetch(`https://salaginex.onrender.com/users/${id}`, {
         method: "DELETE",
       });
       if (response.ok) {
         setMessage("Cliente eliminado satisfactoriamente.");
-        const updatedResponse = await fetch("http://salaginex.onrender.com/users");
+        const updatedResponse = await fetch("https://salaginex.onrender.com/users");
         const updatedData = await updatedResponse.json();
         if (updatedData.data) {
           setData(updatedData.data);

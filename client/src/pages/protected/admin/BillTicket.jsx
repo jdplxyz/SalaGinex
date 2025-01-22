@@ -27,7 +27,7 @@ export const BillTicket = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch('http://salaginex.onrender.com/orden', {
+            const response = await fetch('https://salaginex.onrender.com/orden', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -70,7 +70,7 @@ export const BillTicket = () => {
     // Confirmar la reservación
     const handleConfirmReservation = async () => {
         try {
-            const response = await fetch('http://salaginex.onrender.com/orden', {
+            const response = await fetch('https://salaginex.onrender.com/orden', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
