@@ -6,11 +6,16 @@ import { addMovie } from "./controllers/peliculaController.js";
 import { addReservation } from "./controllers/reservacionController.js";
 import cors from "cors";
 import multer from "multer";
-import path from "path"; // Importa el módulo path
+import path from "path";
+import { fileURLToPath } from "url"; // Importa fileURLToPath para manejar import.meta.url
 
 const upload = multer();
 
 export const app = express();
+
+// Obtén __dirname en módulos ES
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Configura CORS
 app.use(
