@@ -21,7 +21,7 @@ export const BillMovie = () => {
     const pricePerCombo = 4;
 
     const getMovie = async () => {
-        const response = await fetch(`http://salaginex.onrender.com/pelicula/${id}`);
+        const response = await fetch(`https://salaginex.onrender.com/pelicula/${id}`);
         const data = await response.json();
         if (!response.ok) {
             console.error('Película no encontrada.');
@@ -32,7 +32,7 @@ export const BillMovie = () => {
 
     const getSeatReservated = async () => {
         try {
-            const response = await fetch(`http://salaginex.onrender.com/asientos/${id}`);
+            const response = await fetch(`https://salaginex.onrender.com/asientos/${id}`);
             if (!response.ok) {
                 console.error('Error:', response.statusText);
                 return;
