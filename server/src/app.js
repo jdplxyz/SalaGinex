@@ -6,11 +6,13 @@ import { addMovie } from "./controllers/peliculaController.js";
 import { addReservation } from "./controllers/reservacionController.js";
 import cors from "cors";
 import multer from "multer";
+import path from "path"; // Importa el módulo path
 
 const upload = multer();
 
 export const app = express();
 
+// Configura CORS
 app.use(
   cors({
     origin: ["http://localhost:5173", "https://salaginex-1.onrender.com"],
@@ -18,14 +20,23 @@ app.use(
   })
 );
 
+// Middleware para parsear JSON y URL-encoded bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Sirve los archivos estáticos de la carpeta build de React
+app.use(express.static(path.join(__dirname, "build")));
+
+// Rutas de la API
 app.use(usuariosRoute);
 app.use(peliculasRoute);
 app.use(reservacionRoute);
 
+// Rutas específicas
 app.post("/peliculas", upload.single("posterImg"), addMovie);
 app.post("/reservacion", addReservation);
+
+// Maneja todas las demás rutas y sirve el archivo index.html
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
