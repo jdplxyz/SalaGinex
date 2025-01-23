@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import AsideMenu from "../../../components/Dashboard/AsideMenu";
 import { Link } from "react-router-dom";
 import { CurrencyContext } from "../../../contexts/CurrencyContext";
+import { API_URL } from "../../../utils/ApiUrl";
 
 export const Dashboard = () => {
   const [userData, setUserData] = useState([]);
@@ -14,7 +15,7 @@ export const Dashboard = () => {
 
   const getUserData = async () => {
     try {
-      const response = await fetch("http://localhost:1234/users");
+      const response = await fetch(`${API_URL}/users`);
       const data = await response.json();
       if (!response.ok) {
         console.log("error");
@@ -27,7 +28,7 @@ export const Dashboard = () => {
 
   const getOrdenConfirmated = async () => {
     try {
-      const response = await fetch("http://localhost:1234/orden");
+      const response = await fetch(`${API_URL}/orden`);
       const data = await response.json();
       if (!response.ok) {
         console.log("error");

@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { parseJwt } from "../utils/ParseJwt";
 import { AuthContext } from "../utils/AuthContext";
+import { API_URL } from "../utils/ApiUrl";
 
 export const Register = () => {
   const [nombre, setNombre] = useState('');
@@ -13,6 +14,7 @@ export const Register = () => {
   const navigate = useNavigate();
   const [tokenExistAndIsValid, setTokenExistAndIsValid] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar el modal
+
 
   const newUser = {
     nombre: nombre,
@@ -43,7 +45,7 @@ export const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:1234/register", {
+      const response = await fetch(`${API_URL}/register`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"

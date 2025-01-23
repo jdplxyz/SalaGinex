@@ -14,7 +14,7 @@ export const HomeClient = () => {
   // Obtener todas las películas
   const getAllMovies = async () => {
     try {
-      const response = await fetch("http://localhost:1234/peliculas");
+      const response = await fetch($`{API_URL}/peliculas`);
       if (!response.ok) {
         throw new Error("Error al obtener las películas");
       }

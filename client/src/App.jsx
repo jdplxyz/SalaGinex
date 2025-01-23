@@ -22,7 +22,7 @@ export default function App() {
     <CurrencyProviderWraper>
     <AuthProvider>
       <Header />
-      <div className="flex flex-col gap-0 p-0  m-0 w-full h-full ">
+      <div className="flex flex-col gap-0 p-0  m-0 w-full h-full bg-white">
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/login" element={<Login />}></Route>

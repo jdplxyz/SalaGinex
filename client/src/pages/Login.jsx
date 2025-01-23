@@ -4,6 +4,9 @@ import { AuthContext } from "../utils/AuthContext";
 import { useContext } from "react";
 import { parseJwt } from "../utils/ParseJwt";
 import { Link } from "react-router-dom";
+import { API_URL } from "../utils/ApiUrl";
+
+
 
 export const Login = () => {
   const [correo_electronico, setCorreoElectronico] = useState("");
@@ -36,7 +39,7 @@ export const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault(); 
     try {
-      const response = await fetch("http://localhost:1234/login", {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

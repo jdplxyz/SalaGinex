@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import QRCode from "react-qr-code";
 import jsPDF from "jspdf";
+import { API_URL } from "../../../utils/ApiUrl";
 
 export const Invoices = () => {
     const [ordenData, setOrdenData] = useState([]);
@@ -19,10 +20,11 @@ export const Invoices = () => {
     const [filteredOrders, setFilteredOrders] = useState([]);
     const ordersPerPage = 2;
 
+
     const getOrdenConfirmated = async () => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:1234/orden');
+            const response = await fetch(`${API_URL}/orden`);
             if (!response.ok) {
                 throw new Error('Error al obtener los datos');
             }
@@ -40,7 +42,7 @@ export const Invoices = () => {
 
     const getUsersWithReservations = async () => {
         try {
-            const response = await fetch('http://localhost:1234/users/reservacion');
+            const response = await fetch(`${API_URL}/reservacion`);
             const data = await response.json();
             if (!response.ok) {
                 console.log('Error al obtener usuarios con reservaciones');
@@ -53,7 +55,7 @@ export const Invoices = () => {
 
     const getMoviesWithReservations = async () => {
         try {
-            const response = await fetch('http://localhost:1234/peliculas/reservacion');
+            const response = await fetch(`${API_URL}/peliculas/reservacion`);
             const data = await response.json();
             if (!response.ok) {
                 console.log('Error al obtener películas con reservaciones');

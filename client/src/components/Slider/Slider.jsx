@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getNextWeekendDates } from "../../utils/GetDateMovies";
 import { formatDate } from "../../utils/FormatDate";
 import { Link } from "react-router-dom";
+import { API_URL } from "../../utils/ApiUrl";
 
 export const Slider = () => {
   const [selectedDate, setSelectedDate] = useState("");
@@ -11,7 +12,7 @@ export const Slider = () => {
 
   const getAllMovies = async () => {
     try {
-      const response = await fetch("http://localhost:1234/peliculas");
+      const response = await fetch(`${API_URL}/peliculas`);
       if (!response.ok) {
         throw new Error("Error al obtener las películas");
       }

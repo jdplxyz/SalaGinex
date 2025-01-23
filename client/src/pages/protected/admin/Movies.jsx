@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getNextWeekendDates } from "../../../utils/GetDateMovies";
+import { API_URL } from "../../../utils/ApiUrl";
 
 export const Movies = () => {
   const [dataMovie, setDataMovie] = useState([]);
@@ -28,7 +29,7 @@ export const Movies = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await fetch("http://localhost:1234/peliculas");
+      const response = await fetch(`${API_URL}/peliculas`);
       if (!response.ok) {
         throw new Error("Error al obtener las películas");
       }
@@ -54,13 +55,13 @@ export const Movies = () => {
   const handleDeleteMovie = async (client) => {
     const { id_pelicula } = client;
     try {
-      const response = await fetch(`http://localhost:1234/${id_pelicula}`, {
+      const response = await fetch(`${API_URL}/${id_pelicula}`, {
         method: "DELETE",
       });
       if (response.ok) {
         setMessage("Película eliminada correctamente.");
         setOpenMessageModal(!openMessageModal);
-        const updatedResponse = await fetch("http://localhost:1234/peliculas");
+        const updatedResponse = await fetch(`${API_URL}/peliculas`);
         const updatedMovies = await updatedResponse.json();
         if (updatedMovies) {
           setDataMovie(updatedMovies.data);
@@ -87,7 +88,7 @@ export const Movies = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:1234/${selectedMovie.id_pelicula}`,
+        `${API_URL}/${selectedMovie.id_pelicula}`,
         {
           method: "PUT",
           headers: {
@@ -156,13 +157,13 @@ export const Movies = () => {
     formData.append("posterImg", newMovie.poster);
 
     try {
-      const response = await fetch("http://localhost:1234/peliculas", {
+      const response = await fetch(`${API_URL}/peliculas`, {
         method: "POST",
         body: formData,
       });
 
       if (response.ok) {
-        const updatedResponse = await fetch("http://localhost:1234/peliculas");
+        const updatedResponse = await fetch(`${API_URL}/peliculas`);
         const updatedData = await updatedResponse.json();
         setDataMovie(updatedData);
         setMessage("Película agregada correctamente.");

@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { QRCode } from "react-qr-code";
 import { CurrencyContext } from "../../../contexts/CurrencyContext";
-
+import { API_URL } from "../../../utils/ApiUrl";
 export const BillMovie = () => {
     const { id } = useParams();
     const [movie, setMovie] = useState(null);
@@ -32,7 +32,7 @@ export const BillMovie = () => {
     
 
     const getMovie = async () => {
-        const response = await fetch(`http://localhost:1234/pelicula/${id}`);
+        const response = await fetch(`${API_URL}/pelicula/${id}`);
         const data = await response.json();
         if (!response.ok) {
             console.error('Película no encontrada.');
@@ -43,7 +43,7 @@ export const BillMovie = () => {
 
     const getSeatReservated = async () => {
         try {
-            const response = await fetch(`http://localhost:1234/asientos/${id}`);
+            const response = await fetch(`${API_URL}asientos/${id}`);
             if (!response.ok) {
                 console.error('Error:', response.statusText);
                 return;

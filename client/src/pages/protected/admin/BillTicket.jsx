@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { API_URL } from "../../../utils/ApiUrl";
 
 export const BillTicket = () => {
     const [currentOrden, setCurrentOrden] = useState(false);
@@ -27,7 +28,7 @@ export const BillTicket = () => {
         event.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:1234/orden', {
+            const response = await fetch(`${API_URL}/orden`, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json"
@@ -70,7 +71,7 @@ export const BillTicket = () => {
     // Confirmar la reservación
     const handleConfirmReservation = async () => {
         try {
-            const response = await fetch('http://localhost:1234/orden', {
+            const response = await fetch(`${API_URL}/orden`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
