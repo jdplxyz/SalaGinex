@@ -25,7 +25,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, "./dist")));
+app.use(express.static(path.join(__dirname, "../client/dist")));
 
 app.use(usuariosRoute);
 app.use(peliculasRoute);
@@ -35,6 +35,5 @@ app.post("/peliculas", upload.single("posterImg"), addMovie);
 app.post("/reservacion", addReservation);
 
 app.get("*", (req, res) => {
-  console.log("Serving index.html for route:", req.path);
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
