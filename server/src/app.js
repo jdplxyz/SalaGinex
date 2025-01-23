@@ -8,16 +8,17 @@ import cors from "cors";
 import multer from "multer";
 import path from "path";
 import { fileURLToPath } from "url";
-const upload = multer();
 
+const upload = multer();
 export const app = express();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Configuración de CORS
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://salaginex.netlify.app/"],
+    origin: ["http://localhost:5173", "https://salaginex.netlify.app"],
     credentials: true,
   })
 );
