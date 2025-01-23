@@ -246,11 +246,9 @@ export const getUsersWithReservations = async (req, res) => {
       );
 
     if (usersResult.recordset.length === 0) {
-      return res
-        .status(404)
-        .json({
-          message: "No se encontraron usuarios con reservaciones confirmadas.",
-        });
+      return res.status(404).json({
+        message: "No se encontraron usuarios con reservaciones confirmadas.",
+      });
     }
     res.status(200).json({
       message:
@@ -259,10 +257,8 @@ export const getUsersWithReservations = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        message: "Error al obtener los usuarios con reservaciones confirmadas.",
-      }); // Enviar un mensaje de error al cliente
+    res.status(500).json({
+      message: "Error al obtener los usuarios con reservaciones confirmadas.",
+    }); // Enviar un mensaje de error al cliente
   }
 };
