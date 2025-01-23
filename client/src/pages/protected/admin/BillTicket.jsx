@@ -95,7 +95,7 @@ export const BillTicket = () => {
 
     return (
         <>
-            <section className="w-full h-full sm:w-[60%] sm:mx-auto">
+            <section className="w-full h-full sm:w-[60%] sm:mx-auto lg:w-[40%]">
                 <header className="w-full p-5 flex justify-between items-center">
                     <h2 className="text-[24px] font-medium">Facturar Ticket</h2>
                     <div className="flex gap-2">
@@ -106,7 +106,7 @@ export const BillTicket = () => {
                         </Link>
                     </div>
                 </header>
-                <main className="w-[100%] p-5">
+                <main className="w-[100%] p-5 ">
                     <form className="w-full flex flex-col gap-2" onSubmit={getOrderReservated}>
                         <div className="w-full flex flex-col gap-3">
                             <label htmlFor="codigo" className="text-lg font-medium">Código de ticket: </label>
@@ -125,7 +125,7 @@ export const BillTicket = () => {
                     </form>
 
                     {currentOrden && ordenData.asientos && ordenData.combos ? (
-                        <section className="w-full h-[300px] flex flex-col mt-4 shadow-md p-5">
+                        <section className="w-full  h-[300px] flex flex-col mt-4 shadow-md p-5">
                             <h2 className="text-2xl font-bold mx-auto">Factura</h2>
                             <ul className="w-full flex flex-col justify-center mt-5 px-2">
                                 <li className="flex items-center justify-between gap-2">

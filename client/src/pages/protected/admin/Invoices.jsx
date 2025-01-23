@@ -40,7 +40,7 @@ export const Invoices = () => {
 
     const getUsersWithReservations = async () => {
         try {
-            const response = await fetch('http://localhost:1234/reservacion');
+            const response = await fetch('http://localhost:1234/users/reservacion');
             const data = await response.json();
             if (!response.ok) {
                 console.log('Error al obtener usuarios con reservaciones');
@@ -53,7 +53,7 @@ export const Invoices = () => {
 
     const getMoviesWithReservations = async () => {
         try {
-            const response = await fetch('http://localhost:1234/reservacion');
+            const response = await fetch('http://localhost:1234/peliculas/reservacion');
             const data = await response.json();
             if (!response.ok) {
                 console.log('Error al obtener películas con reservaciones');

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../utils/AuthContext";
 import { useContext } from "react";
 import { parseJwt } from "../utils/ParseJwt";
+import { Link } from "react-router-dom";
 
 export const Login = () => {
   const [correo_electronico, setCorreoElectronico] = useState("");
@@ -85,7 +86,7 @@ export const Login = () => {
                 alt="Sala Ginex Logo"
               />
             </a>
-            <p className="text-xl font-bold mt-5">Inicia sesion con tu cuenta</p>
+            <p className="text-xl font-bold mt-5">Inicia sesión con tu cuenta</p>
           </header>
           <section className="w-full flex flex-col items-center sm:w-[100%] sm:mx-auto sm:flex sm:flex-col sm:items-center">
             <div className="flex flex-col w-full p-2">
@@ -112,7 +113,7 @@ export const Login = () => {
                 type="password"
                 name="password"
                 id="clave"
-                placeholder="Ingresa tu password"
+                placeholder="Ingresa tu contraseña"
                 value={clave}
                 onChange={(e) => setClave(e.target.value)}
               />
@@ -126,9 +127,10 @@ export const Login = () => {
               Ingresar
             </button>
           </section>
-          <a href="/forgotpassword" className="text-[#bbb] text-center">
+          <a href="/forgotpassword" className="text-[#bbb] text-center text-[18px]">
             ¿Olvidaste la contraseña?
           </a>
+          <Link to='/register' className="text-[#bbb] text-center  text-[19px]">¿No tienes cuenta? Crear una</Link>
           {message && <p className="mx-auto w-full p-4 bg-red-500 text-white text-center text-lg font-medium rounded-[10px]">{message}</p>}
         </form>
       </section>

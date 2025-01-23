@@ -13,14 +13,16 @@ import { ClientAdmin } from "./pages/protected/admin/Client";
 import { HomeClient } from "./pages/protected/client/HomeClient";
 import { BillMovie } from "./pages/protected/client/BillMovie";
 import { Invoices } from "./pages/protected/admin/Invoices";
+import { CurrencyProviderWraper } from "./contexts/CurrencyContext";
 
 
 export default function App() {
   return (
     <>
+    <CurrencyProviderWraper>
     <AuthProvider>
       <Header />
-      <div className="flex flex-col gap-0 p-0 pb-2 m-0 w-full h-auto ">
+      <div className="flex flex-col gap-0 p-0  m-0 w-full h-full ">
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/login" element={<Login />}></Route>
@@ -53,6 +55,7 @@ export default function App() {
         </Routes>
       </div>
       </AuthProvider>
+      </CurrencyProviderWraper>
     </>
   );
 }

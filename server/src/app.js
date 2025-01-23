@@ -17,7 +17,7 @@ const __dirname = path.dirname(__filename);
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://salaginex-1.onrender.com"],
+    origin: ["http://localhost:5173"],
     credentials: true,
   })
 );

@@ -11,7 +11,7 @@ export const Slider = () => {
 
   const getAllMovies = async () => {
     try {
-      const response = await fetch("https://salaginex.onrender.com/peliculas");
+      const response = await fetch("http://localhost:1234/peliculas");
       if (!response.ok) {
         throw new Error("Error al obtener las películas");
       }
@@ -79,39 +79,36 @@ export const Slider = () => {
               className={`${
                 filteredMovies.length === 1
                   ? "sm:w-[50%] lg:w-[40%] mx-auto"
-                  : "w-full"
+                  : "w-full md:max-h-[100%] "
               }`}
             >
-              <div className="w-full h-[100%] bg-white p-5 rounded-md lg:w-[100%] lg:h-[100%] shadow-md">
+              <div className="w-full h-[100%] bg-transparent  rounded-md lg:w-[100%] lg:h-[100%] shadow-md">
             <img
-              className="w-[100%] h-max-[250px] md:h-[70%] md:w-[100%] object-cover"
+              className="w-[100%] h-max-[250px] md:max-h-[50%] md:w-[100%] object-cover"
               src={movie.poster}
               
               alt={`Poster ${movie.titulo}`}
             />
-            <div className="w-full flex justify-between p-2 items-center">
-              <h2 className="text-md font-medium sm:text-lg">{movie.titulo}</h2>
-              <p className="text-sm text-[#ccc] sm:text-md">{movie.genero}</p>
+            <div className="w-full sm:w-[100%] sm:h-[50%] xl:h-[42%] 2xl:h-[35%] 3xl:h-[32%] bg-white p-5">
+            <div className="w-full flex justify-between p-2 items-center ">
+              <h2 className="text-[22px] font-medium sm:text-lg">{movie.titulo}</h2>
+              <p className="text-[16px] text-[#ccc] sm:text-md">{movie.genero}</p>
             </div>
-            <div className="w-full flex justify-between p-2">
-              <p className="font-medium text-md sm:text-lg">Fecha: {selectedDate}</p>
-              <p className="text-md text-[#ccc] text-sm sm:text-md">{movie.hora_transmision}</p>
+            <div className="w-full flex justify-between items-center p-2">
+              <p className="font-medium text-[22px] sm:text-lg">Fecha: {selectedDate}</p>
+              <p className="text-[18px] text-[#ccc] text-sm sm:text-md">{movie.hora_transmision}</p>
             </div>
-            <p className="p-2 w-full text-black text-gray-600 font-medium text-[15px]">
+            <p className="p-2 w-full text-black text-gray-600 font-medium text-[20px]">
               {movie.sinopsis}
             </p>
+          </div>
           </div>
             </Link>
           ))}
         </div>
       ) : (
         <div className="w-full h-[312px] p-5 flex flex-col justify-center items-center">
-          <p className="text-sm md:text-xl lg:text-2xl text-white">
-            No hay películas disponibles.
-          </p>
-          <p className="text-sm md:text-lg lg:text-xl text-white">
-            Intenta más tarde.
-          </p>
+          <span className="loading loading-spinner loading-lg"></span>
         </div>
       )}
     </section>

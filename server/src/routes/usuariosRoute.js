@@ -7,7 +7,7 @@ import {
   getUserByEmail,
   deleteUserById,
   updateUserById,
-  getUsersWithReservations
+  getUsersWithReservations,
 } from "../controllers/usuarioController.js";
 
 const router = Router();
@@ -24,8 +24,8 @@ router.get("/protected", verifyToken, (req, res) => {
 
 router.get("/users", getAllUsers);
 router.post("/usersByEmail", getUserByEmail);
-router.delete("/users/:id",deleteUserById)
-router.put('/users/:id',updateUserById)
-router.get('/users/reservacion',getUsersWithReservations)
+router.delete("/users/:id", deleteUserById);
+router.put("/users/:id", updateUserById);
+router.get("/users/reservacion", getUsersWithReservations);
 
 export default router;

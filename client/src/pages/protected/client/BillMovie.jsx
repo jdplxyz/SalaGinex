@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { QRCode } from "react-qr-code"; // Importar la librería de QR
+import { useEffect, useState, useContext } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { QRCode } from "react-qr-code";
+import { CurrencyContext } from "../../../contexts/CurrencyContext";
 
 export const BillMovie = () => {
     const { id } = useParams();
@@ -14,11 +15,21 @@ export const BillMovie = () => {
     const [availablesSeat, setAvailableSeat] = useState(0);
     const [modalError, setModalError] = useState(false);
     const [messageError, setErrorMsg] = useState('');
-    const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false); // Estado para el modal de confirmación
-    const [reservationCode, setReservationCode] = useState(""); // Código de reservación
-    const [reservationError, setReservationError] = useState(""); // Estado para el mensaje de error de reservación
+    const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
+    const [reservationCode, setReservationCode] = useState("");
+    const [reservationError, setReservationError] = useState("");
+   
     const pricePerTicket = 2;
     const pricePerCombo = 4;
+    const navigate = useNavigate();
+
+    const { currencyRate, getRateCurrency } = useContext(CurrencyContext);
+
+    useEffect(() => {
+        getRateCurrency(1, 'USD');
+    }, []);
+
+    
 
     const getMovie = async () => {
         const response = await fetch(`http://localhost:1234/pelicula/${id}`);
@@ -99,10 +110,14 @@ export const BillMovie = () => {
         }
     };
 
+    
+
     const calculateTotal = () => {
         const ticketTotal = ticketQuantity * pricePerTicket;
         const combosTotal = selectedCombos.reduce((sum, combo) => sum + combo.precio, 0);
-        return ticketTotal + combosTotal;
+        const totalInUSD = ticketTotal + combosTotal;
+        const totalInDesiredCurrency = totalInUSD * currencyRate;
+        return totalInDesiredCurrency;
     };
 
     const openSeatModal = () => {
@@ -113,17 +128,20 @@ export const BillMovie = () => {
         setIsSeatModalOpen(false);
     };
 
+    const handleClose = () =>{
+        setIsConfirmationModalOpen(false)
+        navigate('/')
+    }
+
     const confirmReservation = async (movie) => {
-        // Validar que la cantidad de tickets no sea mayor que los asientos seleccionados
         if (ticketQuantity > selectedSeats.length) {
             setReservationError("La cantidad de tickets no puede ser mayor que los asientos seleccionados.");
-            setTimeout(() => setReservationError(""), 3000); // Ocultar el mensaje después de 3 segundos
+            setTimeout(() => setReservationError(""), 3000);
             return;
         }
 
         const totalPrice = calculateTotal();
 
-        // Generar un código único para la reservación
         const uniqueCode = `RES-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
         setReservationCode(uniqueCode);
 
@@ -133,7 +151,7 @@ export const BillMovie = () => {
             asientos: selectedSeats,
             combos: selectedCombos,
             precio_total: totalPrice,
-            codigo: uniqueCode, // Enviar el código único al backend
+            codigo: uniqueCode,
         };
 
         const token = localStorage.getItem('token');
@@ -148,7 +166,8 @@ export const BillMovie = () => {
         });
 
         if (response.ok) {
-            setIsConfirmationModalOpen(true); // Mostrar el modal de confirmación
+            setIsConfirmationModalOpen(true);
+            
         } else {
             alert('Error al confirmar la reservación.');
         }
@@ -165,7 +184,11 @@ export const BillMovie = () => {
     };
 
     if (!movie) {
-        return <p>Cargando película...</p>;
+        return (
+        <div className="w-full h-full flex justify-center items-center">   
+         <span className="loading loading-spinner loading-lg"></span>
+        </div>
+        )
     }
 
     const rows = ["A", "B", "C", "D"];
@@ -173,7 +196,8 @@ export const BillMovie = () => {
 
     return (
         <>
-            <header className="w-full p-5 flex justify-between items-center  md:w-[80%] lg:w-[50%]  md:mx-auto">
+        <div className="w-full h-full bg-white">
+            <header className="w-full p-5 flex justify-between items-center md:w-[80%] lg:w-[50%] md:mx-auto ">
                 <h2 className="text-2xl md:text-3xl font-bold">Reservación</h2>
                 <div className="flex gap-2">
                     <Link to="/">
@@ -195,8 +219,7 @@ export const BillMovie = () => {
                 </div>
             </header>
 
-            <main className="w-full p-5">
-                {/* Mostrar mensaje de error de reservación */}
+            <main className="w-full p-5 bg-white">
                 {reservationError && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                         <div className="bg-red-500 text-white p-5 rounded-lg w-[95%] max-w-md">
@@ -242,7 +265,7 @@ export const BillMovie = () => {
                 </section>
 
                 {currentStep === 1 && (
-                    <section className="w-full mt-5  md:w-[80%] lg:w-[50%]  md:mx-auto">
+                    <section className="w-full mt-5 md:w-[80%] lg:w-[50%] md:mx-auto">
                         <h2 className="text-2xl md:text-3xl font-bold mb-4">Combos de Comida</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {[
@@ -258,7 +281,8 @@ export const BillMovie = () => {
                                     onClick={() => handleComboSelection(combo)}
                                 >
                                     <h3 className="text-lg font-bold">{combo.nombre}</h3>
-                                    <p className="text-sm">Precio: ${combo.precio}</p>
+                                    <p className="text-sm">Precio Bs:  {(combo.precio * currencyRate).toFixed(2)}</p>
+                                    <p className="text-sm">Precio $:  {(combo.precio ).toFixed(2)}</p>
                                 </div>
                             ))}
                         </div>
@@ -266,7 +290,7 @@ export const BillMovie = () => {
                 )}
 
                 {currentStep === 2 && (
-                    <section className="w-full mt-5  md:w-[80%] lg:w-[50%]  md:mx-auto">
+                    <section className="w-full mt-5 md:w-[80%] lg:w-[50%] md:mx-auto">
                         <h2 className="text-2xl md:text-3xl font-bold mb-4">Selección de Asientos</h2>
                         <button
                             className="px-6 py-2 bg-blue-500 text-lg font-medium text-white rounded hover:bg-blue-600"
@@ -278,12 +302,12 @@ export const BillMovie = () => {
                 )}
 
                 {currentStep === 3 && (
-                    <section className="w-full mt-5  md:w-[80%] lg:w-[50%]  md:mx-auto">
+                    <section className="w-full mt-5 md:w-[80%] lg:w-[50%] md:mx-auto">
                         <h2 className="text-2xl md:text-3xl font-bold mb-4">Confirmación</h2>
                         <div className="w-full flex flex-col gap-4">
                             <div className="w-full flex justify-between">
                                 <h2 className="text-lg font-bold">Precio por Ticket:</h2>
-                                <p className="text-lg">${pricePerTicket}</p>
+                                <p className="text-lg">${(pricePerTicket * currencyRate).toFixed(2)}</p>
                             </div>
                             <div className="w-full flex justify-between">
                                 <h2 className="text-lg font-bold">Cantidad de Tickets:</h2>
@@ -291,7 +315,9 @@ export const BillMovie = () => {
                             </div>
                             <div className="w-full flex justify-between">
                                 <h2 className="text-lg font-bold">Combos Seleccionados:</h2>
-                                <p className="text-lg">{selectedCombos.map((c) => c.nombre).join(", ")}</p>
+                                <p className="text-lg">
+                                    {selectedCombos.map((c) => `${c.nombre} (Bs ${(c.precio * currencyRate).toFixed(2)})`).join(", ")}
+                                </p>
                             </div>
                             <div className="w-full flex justify-between">
                                 <h2 className="text-lg font-bold">Asientos Seleccionados:</h2>
@@ -299,13 +325,16 @@ export const BillMovie = () => {
                             </div>
                             <div className="w-full flex justify-between">
                                 <h2 className="text-lg font-bold">Total:</h2>
-                                <p className="text-lg">${calculateTotal()}</p>
+                                <div className="flex flex-col items-end">
+                                <p className="text-lg">Bs {calculateTotal().toFixed(2)}</p>
+                                <p className="text-lg">$ { calculateTotal().toFixed(2) / currencyRate}</p>
+                                </div>
                             </div>
                         </div>
                     </section>
                 )}
 
-                <div className="w-full mt-5  md:w-[80%] lg:w-[50%]  md:mx-auto flex justify-between">
+                <div className="w-full mt-5 md:w-[80%] lg:w-[50%] md:mx-auto flex justify-between">
                     {currentStep > 1 && (
                         <button
                             className="px-6 py-2 bg-gray-500 text-lg font-medium text-white rounded hover:bg-gray-600"
@@ -417,7 +446,6 @@ export const BillMovie = () => {
                         <div className="bg-white rounded-lg w-[95%] p-5 max-w-2xl">
                             <h2 className="text-2xl font-bold mb-4">Reservación Confirmada</h2>
                             <div className="flex flex-col items-center">
-                                {/* Código QR personalizado */}
                                 <QRCode
                                     value={reservationCode}
                                     size={200}
@@ -427,13 +455,13 @@ export const BillMovie = () => {
                                 />
                                 <p className="mt-2 text-xl font-bold">Película: <small className="font-medium">{movie.titulo}</small></p>
                                 <p>Asientos: {selectedSeats.join(", ")}</p>
-                                <p>Combos: {selectedCombos.map((c) => c.nombre).join(", ")}</p>
-                                <p>Total: ${calculateTotal()}</p>
+                                <p>Combos: {selectedCombos.map((c) => `${c.nombre} (BS ${(c.precio * currencyRate).toFixed(2)})`).join(", ")}</p>
+                                <p>Total: ${calculateTotal().toFixed(2)}</p>
                             </div>
                             <div className="mt-4 flex justify-end">
                                 <button
                                     className="px-6 py-2 bg-blue-500 text-lg font-medium text-white rounded hover:bg-blue-600"
-                                    onClick={() => setIsConfirmationModalOpen(false)}
+                                    onClick={handleClose}
                                 >
                                     Cerrar
                                 </button>
@@ -442,6 +470,7 @@ export const BillMovie = () => {
                     </div>
                 )}
             </main>
+            </div>
         </>
     );
 };

@@ -32,7 +32,7 @@ export const Header = () => {
   }, []);
 
   return (
-    <header className="shadow-gray-700 max-w-full h-[80px] py-2 bg-[#010739] flex flex-row items-center lg:px-5 overflow-hidden 2xl:max-w-full pb-2">
+    <header className="shadow-gray-700 max-w-full h-[80px] py-2 bg-[#010739] flex flex-row items-center lg:px-5 xl:pr-[70px] overflow-hidden 2xl:max-w-full pb-2">
       <nav className="w-full flex items-center p-5 shadow md:flex justify-between">
         <div className="flex justify-between items-center">
           <span className="text-white text-xl mx-2 block">

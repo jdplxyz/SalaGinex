@@ -58,7 +58,7 @@ export const Hero = () => {
 
       {/* Flecha animada */}
       <svg
-        className="absolute bottom-8 top-[75%] left-[155px] sm:left-[48%] sm:top-[80%] transform -translate-x-1/2 w-16 h-16 text-white animate-bounce xl:w-[64px]"
+        className="absolute bottom-8 top-[75%] left-[155px] sm:left-[48%] sm:top-[80%] transform -translate-x-1/2 w-16 h-16 text-white animate-bounce xl:left-[47%] xl:size-[84px]"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
