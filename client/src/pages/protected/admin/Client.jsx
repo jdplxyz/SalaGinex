@@ -150,12 +150,12 @@ export const ClientAdmin = () => {
   const handleDeleteClient = async (client) => {
     const id = client.id_usuario;
     try {
-      const response = await fetch(`https://salaginex.onrender.com/users/${id}`, {
+      const response = await fetch(`http://localhost:1234/${id}`, {
         method: "DELETE",
       });
       if (response.ok) {
         setMessage("Cliente eliminado satisfactoriamente.");
-        const updatedResponse = await fetch("https://salaginex.onrender.com/users");
+        const updatedResponse = await fetch("http://localhost:1234/users");
         const updatedData = await updatedResponse.json();
         if (updatedData.data) {
           setData(updatedData.data);

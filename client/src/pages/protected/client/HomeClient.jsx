@@ -16,7 +16,7 @@ export const HomeClient= () => {
   // Obtener todas las películas
   const getAllMovies = async () => {
     try {
-      const response = await fetch("https://salaginex.onrender.com/peliculas");
+      const response = await fetch("http://localhost:1234/peliculas");
       if (!response.ok) {
         throw new Error("Error al obtener las películas");
       }

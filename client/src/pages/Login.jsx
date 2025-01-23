@@ -35,7 +35,7 @@ export const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault(); 
     try {
-      const response = await fetch("https://salaginex.onrender.com/login", {
+      const response = await fetch("http://localhost:1234/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
