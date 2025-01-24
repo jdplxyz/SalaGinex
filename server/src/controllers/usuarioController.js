@@ -332,22 +332,52 @@ export const sendMail = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
   const { validPassword, token } = req.body;
+
+  // Validar que se proporcionen la contraseña y el token
+  if (!validPassword || !token) {
+    return res
+      .status(400)
+      .json({ error: "La contraseña y el token son requeridos." });
+  }
+
   try {
     const pool = await connectDatabase();
+
+    // Verificar si el token existe en la base de datos
+    const tokenCheck = await pool
+      .request()
+      .input("token", sql.VarChar, token)
+      .query("SELECT * FROM Administrador.Usuario WHERE reset_token = @token");
+
+    if (tokenCheck.recordset.length === 0) {
+      return res.status(404).json({ error: "Token no válido o expirado." });
+    }
+
+    // Hashear la nueva contraseña
     const hashedPassword = await bcrypt.hash(validPassword, 10);
+
+    // Actualizar la contraseña y limpiar el token de restablecimiento
     const result = await pool
       .request()
       .input("token", sql.VarChar, token)
-      .input("clave", sql.VarChar, hashedPassword)
-      .query(
-        "UPDATE Administrador.Usuario SET Clave = @clave WHERE reset_token = @token"
-      );
+      .input("clave", sql.VarChar, hashedPassword).query(`
+        UPDATE Administrador.Usuario 
+        SET Clave = @clave, reset_token = NULL 
+        WHERE reset_token = @token
+      `);
 
-    if (!result.recordset.length > 0) {
-      return res.json({ error: "Token no encontrado." });
+    // Verificar si se actualizó alguna fila
+    if (result.rowsAffected[0] > 0) {
+      return res
+        .status(200)
+        .json({ message: "Contraseña actualizada correctamente." });
+    } else {
+      return res
+        .status(500)
+        .json({ error: "No se pudo actualizar la contraseña." });
     }
-    return res.json({ message: "Contraseña actualizada correctamente." });
   } catch (error) {
-    return res.json({ error: "Error" });
+    console.error("Error en resetPassword:", error);
+    return res.status(500).json({ error: "Error interno del servidor." });
   }
 };
