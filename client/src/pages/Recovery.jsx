@@ -59,6 +59,7 @@ export const Recovery = () => {
           </section>
           <button className="text-white text-[28px] bg-[#010739] p-1 w-[50%] mx-auto rounded-md">Recuperar</button>
         </form>
+        {message && <p>{message}</p>}
       </section> 
     </>
   );
