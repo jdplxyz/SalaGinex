@@ -43,7 +43,7 @@ export const BillMovie = () => {
 
     const getSeatReservated = async () => {
         try {
-            const response = await fetch(`${API_URL}asientos/${id}`);
+            const response = await fetch(`${API_URL}/asientos/${id}`);
             if (!response.ok) {
                 console.error('Error:', response.statusText);
                 return;
