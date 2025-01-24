@@ -18,38 +18,32 @@ export const Reset = () =>{
         navigate('/')
     }
     
-    const handleSubmit = async (event) =>{
-        event.preventDefault()
-        if(newPassword.password === newPassword.confirmNewPassword){
-            const validPassword= newPassword.password
-            try{
-                const response = await fetch(`${API_URL}/reset`,{
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (newPassword.password === newPassword.confirmNewPassword) {
+            const validPassword = newPassword.password;
+            try {
+                const response = await fetch(`${API_URL}/reset`, {
                     method: 'PUT',
-                    headers:{
-                        'Content-Type':'application/json'
+                    headers: {
+                        'Content-Type': 'application/json'
                     },
-                    body:JSON.stringify({password:validPassword,token:token}),
-                    credentials:'include'
-                })
-                const data = await response.json()
-                if(!response.ok){
-                    setError(data.error)
+                    body: JSON.stringify({ password: validPassword, token: token }),
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    setError(data.error);
+                } else {
+                    setMessage(data);
                 }
-                if(data.error){
-                    setError(data.error)
-                }else{
-                    setMessage(data)
-                }
-                
-
-            }catch(error){
-                setError(error)
+            } catch (error) {
+                setError(error.message);
             }
-        }else{
-            setError('La contrase;as no coinciden.')
+        } else {
+            setError('Las contraseñas no coinciden.');
         }
-        
-    }
+    };
 
     return (
         <>

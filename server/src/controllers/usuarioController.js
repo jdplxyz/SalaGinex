@@ -331,6 +331,8 @@ export const sendMail = async (req, res) => {
 };
 
 export const resetPassword = async (req, res) => {
+  console.log(req.body);
+  /*
   const { validPassword, token } = req.body;
 
   // Validar que se proporcionen la contraseña y el token
@@ -379,5 +381,5 @@ export const resetPassword = async (req, res) => {
   } catch (error) {
     console.error("Error en resetPassword:", error);
     return res.status(500).json({ error: "Error interno del servidor." });
-  }
+  }*/
 };
