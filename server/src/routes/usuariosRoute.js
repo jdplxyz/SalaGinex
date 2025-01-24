@@ -11,6 +11,7 @@ import {
   sendMail,
 } from "../controllers/usuarioController.js";
 
+
 const router = Router();
 
 router.get("/", (req, res) => {

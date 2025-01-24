@@ -8,6 +8,8 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
 
+const { EMAIL_USER: email, EMAIL_PASSWORD: password } = process.env;
+
 export const Login = async (req, res) => {
   const { correo_electronico, clave } = req.body;
   console.log(req.body);
@@ -306,14 +308,14 @@ export const sendMail = async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: "gmail", // O el servicio que uses
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
+        user: email,
+        pass: password,
       },
     });
 
     // Configurar el correo electrónico
     const mailOptions = {
-      from: process.env.EMAIL_USER, // Usar el correo configurado en las variables de entorno
+      from: email, // Usar el correo configurado en las variables de entorno
       to: correo_electronico,
       subject: "Restablecimiento de contraseña",
       text: `Para restablecer tu contraseña, haz clic en el siguiente enlace: ${resetUrl}`,
