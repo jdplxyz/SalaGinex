@@ -10,22 +10,37 @@ export const Recovery = () => {
   const [correo_electronico,setCorreoElectronico] = useState('')
   const [message,setMessage] = useState("")
 
-  const handleSubmit = async () =>{
-    event.preventDefault()
-    try{
-      const response = await fetch(`${API_URL}/recuperar`,{
-        method:'POST',
-        headers:{
-          "Content-Type":"application/json",
-        },
-        body:JSON.stringify({correo_electronico})
-      });
-      const data = await response.json()
-      setMessage(data.message)
-    }catch(error){
-      setMessage("Error al enviar la solicitud");
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Evita el comportamiento por defecto del formulario
+  
+    // Asegúrate de que `correo_electronico` esté definido (por ejemplo, desde un estado o un campo de formulario)
+    if (!correo_electronico) {
+      setMessage("El correo electrónico es requerido.");
+      return;
     }
-  }
+  
+    try {
+      const response = await fetch(`${API_URL}/recuperar`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ correo_electronico }),
+      });
+  
+      // Verificar si la respuesta es exitosa (código 2xx)
+      if (!response.ok) {
+        const errorData = await response.json(); // Intentar obtener el mensaje de error del servidor
+        throw new Error(errorData.error || "Error en la solicitud");
+      }
+  
+      const data = await response.json(); // Obtener la respuesta JSON
+      setMessage(data.message); // Establecer el mensaje de éxito
+    } catch (error) {
+      console.error("Error en handleSubmit:", error); // Registrar el error para depuración
+      setMessage(error.message || "Error al enviar la solicitud"); // Establecer el mensaje de error
+    }
+  };
   
   return (
     <>
