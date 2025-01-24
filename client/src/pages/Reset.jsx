@@ -35,7 +35,12 @@ export const Reset = () =>{
                 if(!response.ok){
                     setError(data.error)
                 }
-                setMessage(data)
+                if(data.error){
+                    setError(data.error)
+                }else{
+                    setMessage(data)
+                }
+                
 
             }catch(error){
                 setError(error)
