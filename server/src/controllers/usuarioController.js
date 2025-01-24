@@ -316,7 +316,7 @@ export const sendMail = async (req, res) => {
     sendSmtpEmail.htmlContent = `<p>Haz clic en el siguiente enlace para restablecer tu contraseña: <a href="${resetUrl}">Restablecer contraseña</a></p>`;
     sendSmtpEmail.sender = {
       name: "Sala Ginex",
-      email: "Salaginex@gmail.com",
+      email: "jdplxyz@gmail.com",
     };
 
     await apiInstance.sendTransacEmail(sendSmtpEmail);
