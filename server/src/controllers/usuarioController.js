@@ -331,5 +331,23 @@ export const sendMail = async (req, res) => {
 };
 
 export const resetPassword = async (req, res) => {
-  return res.json({ message: "Todo bien", data: req.body });
+  const { validPassword, token } = req.body;
+  try {
+    const pool = await connectDatabase();
+    const hashedPassword = await bcrypt.hash(validPassword, 10);
+    const result = await pool
+      .request()
+      .input("token", sql.VarChar, token)
+      .input("clave", sql.VarChar, hashedPassword)
+      .query(
+        "UPDATE Administrador.Usuario SET Clave = @clave WHERE reset_token = @token"
+      );
+
+    if (!result.recordset.length > 0) {
+      return res.json({ error: "Token no encontrado." });
+    }
+    return res.json({ message: "Contraseña actualizada correctamente." });
+  } catch (error) {
+    return res.json({ error: "Error" });
+  }
 };

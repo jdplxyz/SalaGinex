@@ -5,13 +5,14 @@ import { API_URL } from "../utils/ApiUrl";
 export const Reset = () =>{
     const navigate = useNavigate()
     const {token} = useParams()
+    console.log(token)
     const [isVisible,setIsvisible] = useState(false)
     const [newPassword,setNewPassword] = useState({
         password: '',
         confirmNewPassword: ''
     })
     const [error,setError] = useState('')
-    const [message,setMessage] = useState('')
+    const [message,setMessage] = useState({})
 
     if(!token){
         navigate('/')
@@ -27,7 +28,7 @@ export const Reset = () =>{
                     headers:{
                         'Content-Type':'application/json'
                     },
-                    body:JSON.stringify({password:validPassword}),
+                    body:JSON.stringify({password:validPassword,token:token}),
                     credentials:'include'
                 })
                 const data = await response.json()
@@ -39,6 +40,8 @@ export const Reset = () =>{
             }catch(error){
                 setError(error)
             }
+        }else{
+            setError('La contrase;as no coinciden.')
         }
         
     }
@@ -103,7 +106,8 @@ export const Reset = () =>{
               </section>
               <button className="text-white text-[20px] font-medium bg-[#010739] p-3 w-[30%] mx-auto rounded-md">Cambiar</button>
             </form>
-            {message || error && <p>{message || error}</p>}
+            {message  && <p>{message.message}</p>}
+            {error && <p>{error}</p>}
           </section> 
         </>
       );
