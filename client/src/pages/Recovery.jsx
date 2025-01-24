@@ -13,7 +13,7 @@ export const Recovery = () => {
   const handleSubmit = async () =>{
     event.preventDefault()
     try{
-      const response = await fetch("https://salaginex-production.up.railway.app/recuperar",{
+      const response = await fetch(`${API_URL}/recuperar`,{
         method:'POST',
         headers:{
           "Content-Type":"application/json",
