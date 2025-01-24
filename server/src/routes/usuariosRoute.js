@@ -9,8 +9,8 @@ import {
   updateUserById,
   getUsersWithReservations,
   sendMail,
+  resetPassword,
 } from "../controllers/usuarioController.js";
-
 
 const router = Router();
 
@@ -30,5 +30,5 @@ router.delete("/users/:id", deleteUserById);
 router.put("/users/:id", updateUserById);
 router.get("/users/reservacion", getUsersWithReservations);
 router.post("/recuperar", sendMail);
-
+router.put("/reset", resetPassword);
 export default router;

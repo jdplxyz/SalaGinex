@@ -329,3 +329,7 @@ export const sendMail = async (req, res) => {
     return res.status(500).json({ error: "Error interno del servidor." });
   }
 };
+
+export const resetPassword = async (req, res) => {
+  return res.json({ message: "Todo bien", data: req.body });
+};
