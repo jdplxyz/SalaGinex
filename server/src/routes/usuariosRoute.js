@@ -8,6 +8,7 @@ import {
   deleteUserById,
   updateUserById,
   getUsersWithReservations,
+  sendMail,
 } from "../controllers/usuarioController.js";
 
 const router = Router();
@@ -27,5 +28,6 @@ router.post("/usersByEmail", getUserByEmail);
 router.delete("/users/:id", deleteUserById);
 router.put("/users/:id", updateUserById);
 router.get("/users/reservacion", getUsersWithReservations);
+router.post("/recuperar", sendMail);
 
 export default router;

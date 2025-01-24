@@ -8,12 +8,29 @@ import { API_URL } from "../utils/ApiUrl";
 
 export const Recovery = () => {
   const [correo_electronico,setCorreoElectronico] = useState('')
+  const [message,setMessage] = useState("")
 
+  const handleSubmit = async () =>{
+    event.preventDefault()
+    try{
+      const response = await fetch("https://salaginex-production.up.railway.app/recuperar",{
+        method:'POST',
+        headers:{
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify({correo_electronico})
+      });
+      const data = await response.json()
+      setMessage(data.message)
+    }catch(error){
+      setMessage("Error al enviar la solicitud");
+    }
+  }
   
   return (
     <>
       <section className="w-full flex flex-col items-center justify-center gap-3">
-        <form  className="w-[100%] h-auto bg-white flex flex-col gap-5 p-5 sm:w-[50%] xl:w-[30%] sm:shadow-lg sm:rounded-lg sm:mt-5 sm:py-5 sm:mt-[25px]">
+        <form onSubmit={handleSubmit} className="w-[100%] h-auto bg-white flex flex-col gap-5 p-5 sm:w-[50%] xl:w-[30%] sm:shadow-lg sm:rounded-lg sm:mt-5 sm:py-5 sm:mt-[25px]">
           <header className="w-full flex flex-col items-center">
             <a href="/inicio">
               <img

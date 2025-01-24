@@ -262,7 +262,7 @@ export const getUsersWithReservations = async (req, res) => {
     }); // Enviar un mensaje de error al cliente
   }
 };
-const sendMail = async (req, res) => {
+export const sendMail = async (req, res) => {
   const { correo_electronico } = req.body;
 
   // Validar que el correo electrónico esté presente
@@ -300,15 +300,13 @@ const sendMail = async (req, res) => {
         "UPDATE Administrador.Usuario SET reset_token = @reset_token WHERE id_usuario = @id_usuario"
       );
 
-    // Crear la URL de restablecimiento
     const resetUrl = `https://salaginex.netlify.app/reset-password/${resetToken}`;
 
-    // Configurar el transporte de correo electrónico (usando nodemailer)
     const transporter = nodemailer.createTransport({
       service: "gmail", // O el servicio que uses
       auth: {
-        user: process.env.EMAIL_USER, // Cambia esto por tu correo
-        pass: process.env.EMAIL_PASSWORD, // Cambia esto por tu contraseña
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 
