@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getNextWeekendDates } from "../../../utils/GetDateMovies";
 import { formatDate } from "../../../utils/FormatDate";
+import { API_URL } from "../../../utils/ApiUrl";
 
 export const HomeClient = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [dataMovie, setDataMovie] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [error, setError] = useState(null);
+
 
   const weekendDates = getNextWeekendDates();
 
