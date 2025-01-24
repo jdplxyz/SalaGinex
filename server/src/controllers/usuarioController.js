@@ -6,7 +6,7 @@ import { config } from "dotenv";
 config({ path: "./.env" });
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
 
 export const Login = async (req, res) => {
   const { correo_electronico, clave } = req.body;
