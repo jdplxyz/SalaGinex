@@ -6,14 +6,13 @@ import { config } from "dotenv";
 config({ path: "./.env" });
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import { Resend } from "resend";
+import brevo from "@getbrevo/brevo";
 
-const {
-  EMAIL_USER: email,
-  EMAIL_PASSWORD: password,
-  EMAIL_API: api,
-} = process.env;
-const resend = new Resend(api);
+const { EMAIL_API: api } = process.env;
+
+const apiInstance = new brevo.TransactionalEmailsApi();
+apiInstance.setApiKey(brevo.TransactionalEmailsApiApiKeys.apiKey, api);
+const sendSmtpEmail = new brevo.SendSmtpEmail();
 
 export const Login = async (req, res) => {
   const { correo_electronico, clave } = req.body;
@@ -87,7 +86,7 @@ export const Register = async (req, res) => {
     }
 
     const pool = await connectDatabase();
-    const result = await pool
+    await pool
       .request()
       .input("nombre", sql.VarChar, nombre)
       .input("apellido", sql.VarChar, apellido)
@@ -105,18 +104,23 @@ export const Register = async (req, res) => {
 };
 
 export const getAllUsers = async (req, res) => {
-  const pool = await connectDatabase();
-  const data = await pool
-    .request()
-    .input("rol", sql.VarChar, "Cliente")
-    .query("SELECT * FROM Administrador.Usuario WHERE rol = @rol");
-  res.json({ data: data.recordset });
+  try {
+    const pool = await connectDatabase();
+    const data = await pool
+      .request()
+      .input("rol", sql.VarChar, "Cliente")
+      .query("SELECT * FROM Administrador.Usuario WHERE rol = @rol");
+    res.json({ data: data.recordset });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error en el servidor", error: error.message });
+  }
 };
 
 export const getUserByEmail = async (req, res) => {
   const { email } = req.body;
 
-  // Validar que el email esté presente
   if (!email) {
     return res
       .status(400)
@@ -134,10 +138,8 @@ export const getUserByEmail = async (req, res) => {
     );
 
     if (result.recordset.length > 0) {
-      console.log("Usuario encontrado");
       return res.json({ data: result.recordset });
     } else {
-      console.log("Usuario no encontrado");
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
   } catch (error) {
@@ -154,17 +156,18 @@ export const deleteUserById = async (req, res) => {
   const { id } = req.params;
   try {
     const pool = await connectDatabase();
-    const result = await pool
+    await pool
       .request()
       .input("id_usuario", sql.Int, id)
       .query(
         "DELETE FROM Administrador.Usuario WHERE id_usuario = @id_usuario"
       );
-    res.status(200).json({ message: "Cliente elimnado." });
+    res.status(200).json({ message: "Cliente eliminado." });
   } catch (error) {
-    res.status(401).res.json({ error: "Error al eliminar cliente" });
+    res.status(500).json({ error: "Error al eliminar cliente" });
   }
 };
+
 export const updateUserById = async (req, res) => {
   const { id } = req.params;
   const { name, apellido, email } = req.body;
@@ -187,7 +190,7 @@ export const updateUserById = async (req, res) => {
         SET nombre = @nombre, apellido = @apellido, correo_electronico = @correo_electronico 
         WHERE id_usuario = @id_usuario
       `);
-    if (result.rowsAffected > 0) {
+    if (result.rowsAffected[0] > 0) {
       return res.json({ message: "Cliente actualizado correctamente." });
     } else {
       return res
@@ -268,9 +271,10 @@ export const getUsersWithReservations = async (req, res) => {
     console.error(error);
     res.status(500).json({
       message: "Error al obtener los usuarios con reservaciones confirmadas.",
-    }); // Enviar un mensaje de error al cliente
+    });
   }
 };
+
 export const sendMail = async (req, res) => {
   const { correo_electronico } = req.body;
 
@@ -289,20 +293,17 @@ export const sendMail = async (req, res) => {
         "SELECT * FROM Administrador.Usuario WHERE correo_electronico = @correo"
       );
 
-    // Verificar si el usuario existe
     if (user.recordset.length === 0) {
       return res.status(400).json({
         error: "No se encontraron usuarios con ese correo electrónico.",
       });
     }
 
-    // Generar el token de restablecimiento
     const resetToken = crypto.randomBytes(20).toString("hex");
 
-    // Actualizar el campo reset_token en la base de datos
     await pool
       .request()
-      .input("id_usuario", sql.Int, user.recordset[0].id_usuario) // Asumo que id_usuario es un número entero
+      .input("id_usuario", sql.Int, user.recordset[0].id_usuario)
       .input("reset_token", sql.VarChar, resetToken)
       .query(
         "UPDATE Administrador.Usuario SET reset_token = @reset_token WHERE id_usuario = @id_usuario"
@@ -310,26 +311,21 @@ export const sendMail = async (req, res) => {
 
     const resetUrl = `https://salaginex.netlify.app/recuperar-contraseña/${resetToken}`;
 
-    // Enviar el correo electrónico
+    sendSmtpEmail.subject = "Hola, correo para restablecer clave";
+    sendSmtpEmail.to = [{ email: correo_electronico }];
+    sendSmtpEmail.htmlContent = `<p>Haz clic en el siguiente enlace para restablecer tu contraseña: <a href="${resetUrl}">Restablecer contraseña</a></p>`;
+    sendSmtpEmail.sender = {
+      name: "Sala Ginex",
+      email: "Salaginex@gmail.com",
+    };
 
-    const { data, error } = await resend.emails.send({
-      from: email,
-      to: [`${correo_electronico}`],
-      subject: "Restablecer contraseña",
-      html: `<h1>Hola, este es un correo para restablecer tu contraseña</h1><br/>
-            <p>Ingresa a este link para restablecer la contraseña:</p><a>${resetUrl}</a>
-        `,
-    });
+    await apiInstance.sendTransacEmail(sendSmtpEmail);
 
-    if (error) {
-      return console.error({ error });
-    }
-    // Respuesta exitosa
     return res
       .status(200)
-      .json({ message: "Correo de restablecimiento enviado.", data: data });
+      .json({ message: "Correo de restablecimiento enviado." });
   } catch (error) {
-    console.error("Error en sendMail:", error); // Registrar el error para depuración
+    console.error("Error en sendMail:", error);
     return res.status(500).json({ error: "Error interno del servidor." });
   }
 };
