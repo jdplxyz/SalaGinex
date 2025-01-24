@@ -332,6 +332,7 @@ export const sendMail = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
   console.log(req.body);
+  return res.json({data:req.body})
   /*
   const { validPassword, token } = req.body;
 
