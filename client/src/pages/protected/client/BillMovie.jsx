@@ -156,7 +156,7 @@ export const BillMovie = () => {
 
         const token = localStorage.getItem('token');
 
-        const response = await fetch('http://localhost:1234/reservacion', {
+        const response = await fetch(`${API_URL}/reservacion`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
