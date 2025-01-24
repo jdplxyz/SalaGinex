@@ -6,6 +6,7 @@ import { addMovie } from "./controllers/peliculaController.js";
 import { addReservation } from "./controllers/reservacionController.js";
 import cors from "cors";
 import multer from "multer";
+import nodemailer from "nodemailer";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -22,6 +23,14 @@ app.use(
     credentials: true,
   })
 );
+
+const transporter = nodemailer.createTransport({
+  service: "Gmail", // Puedes usar otros servicios como Outlook, Yahoo, etc.
+  auth: {
+    user: process.env.EMAIL_USER, // Tu correo electrónico
+    pass: process.env.EMAIL_PASSWORD, // Tu contraseña de aplicación (no la contraseña de tu correo)
+  },
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

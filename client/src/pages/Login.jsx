@@ -130,7 +130,7 @@ export const Login = () => {
               Ingresar
             </button>
           </section>
-          <a href="/forgotpassword" className="text-[#bbb] text-center text-[18px]">
+          <a href="/recovery" className="text-[#bbb] text-center text-[18px]">
             ¿Olvidaste la contraseña?
           </a>
           <Link to='/register' className="text-[#bbb] text-center  text-[19px]">¿No tienes cuenta? Crear una</Link>
