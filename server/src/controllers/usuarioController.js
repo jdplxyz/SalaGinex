@@ -5,6 +5,7 @@ import sql from "mssql";
 import { config } from "dotenv";
 config({ path: "./.env" });
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 export const Login = async (req, res) => {
   const { correo_electronico, clave } = req.body;
