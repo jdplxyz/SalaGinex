@@ -263,9 +263,8 @@ export const getUsersWithReservations = async (req, res) => {
   }
 };
 export const sendMail = async (req, res) => {
-  return res.json({ message: req.body });
+  const { correo_electronico } = req.body;
 
-  /*
   if (!correo_electronico) {
     return res
       .status(400)
@@ -328,5 +327,5 @@ export const sendMail = async (req, res) => {
   } catch (error) {
     console.error("Error en sendMail:", error); // Registrar el error para depuración
     return res.status(500).json({ error: "Error interno del servidor." });
-  }*/
+  }
 };
