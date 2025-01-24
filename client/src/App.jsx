@@ -15,7 +15,7 @@ import { BillMovie } from "./pages/protected/client/BillMovie";
 import { Invoices } from "./pages/protected/admin/Invoices";
 import { CurrencyProviderWraper } from "./contexts/CurrencyContext";
 import { Recovery } from "./pages/Recovery";
-
+import { Reset } from "./pages/Reset";
 export default function App() {
   return (
     <>
@@ -28,6 +28,7 @@ export default function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/recovery" element={<Recovery/>}></Route>
           <Route path="/register" element={<Register />}></Route>
+          <Route path='/reset/:token' element={<Reset/>}></Route>
           <Route path="/dashboard" element={<ProtectedRoutesAdmin> <Dashboard/> </ProtectedRoutesAdmin>}></Route>
           <Route
             path="/inicio"

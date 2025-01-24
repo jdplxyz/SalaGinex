@@ -6,9 +6,14 @@ import { config } from "dotenv";
 config({ path: "./.env" });
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-const { EMAIL_USER: email, EMAIL_PASSWORD: password } = process.env;
+const {
+  EMAIL_USER: email,
+  EMAIL_PASSWORD: password,
+  EMAIL_API: api,
+} = process.env;
+const resend = new Resend(api);
 
 export const Login = async (req, res) => {
   const { correo_electronico, clave } = req.body;
@@ -303,31 +308,26 @@ export const sendMail = async (req, res) => {
         "UPDATE Administrador.Usuario SET reset_token = @reset_token WHERE id_usuario = @id_usuario"
       );
 
-    const resetUrl = `https://salaginex.netlify.app/reset-password/${resetToken}`;
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail", // O el servicio que uses
-      auth: {
-        user: email,
-        pass: password,
-      },
-    });
-
-    // Configurar el correo electrónico
-    const mailOptions = {
-      from: email, // Usar el correo configurado en las variables de entorno
-      to: correo_electronico,
-      subject: "Restablecimiento de contraseña",
-      text: `Para restablecer tu contraseña, haz clic en el siguiente enlace: ${resetUrl}`,
-    };
+    const resetUrl = `https://salaginex.netlify.app/recuperar-contraseña/${resetToken}`;
 
     // Enviar el correo electrónico
-    await transporter.sendMail(mailOptions);
 
+    const { data, error } = await resend.emails.send({
+      from: email,
+      to: [`${correo_electronico}`],
+      subject: "Restablecer contraseña",
+      html: `<h1>Hola, este es un correo para restablecer tu contraseña</h1><br/>
+            <p>Ingresa a este link para restablecer la contraseña:</p><a>${resetUrl}</a>
+        `,
+    });
+
+    if (error) {
+      return console.error({ error });
+    }
     // Respuesta exitosa
     return res
       .status(200)
-      .json({ message: "Correo de restablecimiento enviado." });
+      .json({ message: "Correo de restablecimiento enviado.", data: data });
   } catch (error) {
     console.error("Error en sendMail:", error); // Registrar el error para depuración
     return res.status(500).json({ error: "Error interno del servidor." });
