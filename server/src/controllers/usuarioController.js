@@ -331,13 +331,10 @@ export const sendMail = async (req, res) => {
 };
 
 export const resetPassword = async (req, res) => {
-  console.log(req.body);
-  return res.json({data:req.body})
-  /*
-  const { validPassword, token } = req.body;
+  const { password, token } = req.body;
 
   // Validar que se proporcionen la contraseña y el token
-  if (!validPassword || !token) {
+  if (!password || !token) {
     return res
       .status(400)
       .json({ error: "La contraseña y el token son requeridos." });
@@ -357,7 +354,7 @@ export const resetPassword = async (req, res) => {
     }
 
     // Hashear la nueva contraseña
-    const hashedPassword = await bcrypt.hash(validPassword, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Actualizar la contraseña y limpiar el token de restablecimiento
     const result = await pool
@@ -382,5 +379,5 @@ export const resetPassword = async (req, res) => {
   } catch (error) {
     console.error("Error en resetPassword:", error);
     return res.status(500).json({ error: "Error interno del servidor." });
-  }*/
+  }
 };
