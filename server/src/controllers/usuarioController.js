@@ -263,7 +263,8 @@ export const getUsersWithReservations = async (req, res) => {
   }
 };
 export const sendMail = async (req, res) => {
-  // Validar que el correo electrónico esté presente
+  const { correo_electronico } = req.body;
+
   if (!correo_electronico) {
     return res
       .status(400)
