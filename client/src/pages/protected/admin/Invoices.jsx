@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import QRCode from "react-qr-code";
 import jsPDF from "jspdf";
 import { API_URL } from "../../../utils/ApiUrl";
+import { CurrencyContext } from "../../../contexts/CurrencyContext";
 
 export const Invoices = () => {
     const [ordenData, setOrdenData] = useState([]);
@@ -18,6 +19,13 @@ export const Invoices = () => {
     const [selectedMovie, setSelectedMovie] = useState(null);
     const [dataSelected, setDataSelected] = useState(null);
     const [filteredOrders, setFilteredOrders] = useState([]);
+
+
+
+    const {currencyRate,getRateCurrency} = useContext(CurrencyContext)
+  
+ 
+
     const ordersPerPage = 2;
 
 
@@ -42,7 +50,7 @@ export const Invoices = () => {
 
     const getUsersWithReservations = async () => {
         try {
-            const response = await fetch(`${API_URL}/reservacion`);
+            const response = await fetch(`${API_URL}/users/reservacion`);
             const data = await response.json();
             if (!response.ok) {
                 console.log('Error al obtener usuarios con reservaciones');
@@ -177,6 +185,7 @@ export const Invoices = () => {
         getOrdenConfirmated();
         getUsersWithReservations();
         getMoviesWithReservations();
+        getRateCurrency(1, 'USD');
     }, []);
 
     useEffect(() => {
@@ -186,6 +195,8 @@ export const Invoices = () => {
     if (loading) return <p>Cargando...</p>;
     if (error) return <p>Error: {error}</p>;
 
+    console.log(currentsOrden)
+    console.log(usersWithReservations)
     return (
         <section className="w-full min-h-screen p-5 bg-gray-100 md:flex md:flex-col md:items-center ">
            
@@ -240,8 +251,8 @@ export const Invoices = () => {
                                     <p className="text-lg font-medium sm:text-[22px]">Usuario: {user ? `${user.nombre} ${user.apellido}` : "Desconocido"}</p>
                                     <p className="text-md sm:text-[22px]">Película: {movie ? movie.titulo : "Desconocido"}</p>
                                     <p className="text-md sm:text-[22px]">Fecha: {formatDate(orden.fecha_reserva)}</p>
-                                    <p className="text-md sm:text-[22px]">Total: {orden.total} $</p>
-                                    <p className="text-md sm:text-[22px]">TotalBS: {orden.total * 60} BS</p>
+                                    <p className="text-md sm:text-[22px]">Total $: {parseFloat(orden.total  / currencyRate).toFixed(2)} $</p>
+                                    <p className="text-md sm:text-[22px]">Total Bs:  {orden.total} BS</p>
                                 </div>
                             );
                         })}

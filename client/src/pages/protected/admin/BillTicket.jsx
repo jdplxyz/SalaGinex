@@ -6,22 +6,36 @@ export const BillTicket = () => {
     const [currentOrden, setCurrentOrden] = useState(false);
     const [code, setCode] = useState('');
     const [ordenData, setOrdenData] = useState({});
+    const [userData, setUserData] = useState([]);
     const [error, setError] = useState('');
     const [messageConfirmated, setMessageConfirmated] = useState('');
     const [modalConfirmated, setModalConfirmated] = useState(false);
+    const [user, setUser] = useState({});
 
-  
     useEffect(() => {
         if (error || modalConfirmated) {
             const timer = setTimeout(() => {
                 setError('');
                 setCode('');
                 setModalConfirmated(false);
-                setOrdenData({})
+                setOrdenData({});
             }, 2000);
             return () => clearTimeout(timer);
         }
-    }, [error,modalConfirmated]);
+    }, [error, modalConfirmated]);
+
+    const getUserData = async () => {
+        try {
+            const response = await fetch(`${API_URL}/users`);
+            const data = await response.json();
+            if (!response.ok) {
+                console.log("error");
+            }
+            setUserData(data.data || []);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     // Obtener la orden reservada
     const getOrderReservated = async (event) => {
@@ -55,6 +69,9 @@ export const BillTicket = () => {
                 if (typeof orden.combos === 'string') {
                     orden.combos = JSON.parse(orden.combos);
                 }
+
+                const user = userData.find((u) => u.id_usuario == orden.id_usuario);
+                setUser(user || {});
 
                 setOrdenData(orden);
                 setCurrentOrden(true);
@@ -94,6 +111,10 @@ export const BillTicket = () => {
         }
     };
 
+    useEffect(() => {
+        getUserData();
+    }, []);
+
     return (
         <>
             <section className="w-full h-full sm:w-[60%] sm:mx-auto lg:w-[40%]">
@@ -126,9 +147,13 @@ export const BillTicket = () => {
                     </form>
 
                     {currentOrden && ordenData.asientos && ordenData.combos ? (
-                        <section className="w-full  h-[300px] flex flex-col mt-4 shadow-md p-5">
+                        <section className="w-full  h-[350px] flex flex-col mt-4 shadow-md p-5">
                             <h2 className="text-2xl font-bold mx-auto">Factura</h2>
                             <ul className="w-full flex flex-col justify-center mt-5 px-2">
+                                <li className="flex items-center justify-between gap-2">
+                                    <p className="text-left text-lg font-medium">Nombre: </p>
+                                    <small className="text-[15px]">{user.nombre || "No disponible"}</small>
+                                </li>
                                 <li className="flex items-center justify-between gap-2">
                                     <p className="text-left text-lg font-medium">Fecha de reservación: </p>
                                     <small className="text-[15px]">{new Date(ordenData.fecha_reserva).toLocaleDateString()}</small>
@@ -167,7 +192,6 @@ export const BillTicket = () => {
                         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
                             <div className="bg-white rounded-lg w-[95%] p-5 max-w-2xl">
                                 <p>{messageConfirmated}</p>
-                        
                             </div>
                         </div>
                     )}
