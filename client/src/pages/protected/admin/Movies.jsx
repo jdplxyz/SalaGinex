@@ -55,7 +55,7 @@ export const Movies = () => {
   const handleDeleteMovie = async (client) => {
     const { id_pelicula } = client;
     try {
-      const response = await fetch(`${API_URL}/${id_pelicula}`, {
+      const response = await fetch(`${API_URL}/pelicula/${id_pelicula}`, {
         method: "DELETE",
       });
       if (response.ok) {
