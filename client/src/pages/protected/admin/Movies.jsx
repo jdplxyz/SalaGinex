@@ -52,23 +52,36 @@ export const Movies = () => {
     return () => clearTimeout(timer);
   }, [message]);
 
-  const handleDeleteMovie = async (client) => {
-    const { id_pelicula } = client;
+  const handleDeleteMovie = async (movie) => {
+    const { id_pelicula } = movie;
+  
+    if (!id_pelicula) {
+      console.error("ID de película no válido");
+      return;
+    }
+  
     try {
       const response = await fetch(`${API_URL}/pelicula/${id_pelicula}`, {
         method: "DELETE",
       });
-      if (response.ok) {
-        setMessage("Película eliminada correctamente.");
-        setOpenMessageModal(!openMessageModal);
-        const updatedResponse = await fetch(`${API_URL}/peliculas`);
-        const updatedMovies = await updatedResponse.json();
-        if (updatedMovies) {
-          setDataMovie(updatedMovies.data);
-        }
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error al eliminar película:", errorData);
+        return;
+      }
+  
+      setMessage("Película eliminada correctamente.");
+      setOpenMessageModal(!openMessageModal);
+  
+      const updatedResponse = await fetch(`${API_URL}/peliculas`);
+      const updatedMovies = await updatedResponse.json();
+  
+      if (updatedMovies) {
+        setDataMovie(updatedMovies.data);
       }
     } catch (error) {
-      console.error("Error al eliminar película");
+      console.error("Error al eliminar película:", error);
     }
   };
 
@@ -88,7 +101,7 @@ export const Movies = () => {
 
     try {
       const response = await fetch(
-        `${API_URL}/${selectedMovie.id_pelicula}`,
+        `${API_URL}/peliculas/${selectedMovie.id_pelicula}`,
         {
           method: "PUT",
           headers: {

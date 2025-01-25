@@ -6,27 +6,27 @@ export const addMovie = async (req, res) => {
   const { title, gender, broadcastDate, broadcastHour, sinopsis } = req.body;
   const posterImg = req.file.buffer;
 
-
-
   try {
     const pool = await connectDatabase();
     const result = await pool
       .request()
-      .input('titulo', sql.VarChar, title)
-      .input('genero', sql.VarChar, gender)
-      .input('fecha_transmision', sql.Date, broadcastDate)
-      .input('hora_transmision', sql.VarChar, broadcastHour)
-      .input('poster', sql.VarBinary, posterImg)
-      .input('sinopsis', sql.Text, sinopsis)
-      .query(`
+      .input("titulo", sql.VarChar, title)
+      .input("genero", sql.VarChar, gender)
+      .input("fecha_transmision", sql.Date, broadcastDate)
+      .input("hora_transmision", sql.VarChar, broadcastHour)
+      .input("poster", sql.VarBinary, posterImg)
+      .input("sinopsis", sql.Text, sinopsis).query(`
         INSERT INTO Administrador.Peliculas (titulo, genero, fecha_transmision, hora_transmision, poster, sinopsis)
         OUTPUT INSERTED.id_pelicula
         VALUES (@titulo, @genero, @fecha_transmision, @hora_transmision, @poster, @sinopsis)
-      `);;
+      `);
 
-    res.status(200).json({ message: 'Película agregada exitosamente.' });
+    res.status(200).json({ message: "Película agregada exitosamente." });
   } catch (error) {
-    res.status(500).json({ error: 'Error al ingresar la película.', details: error.message });
+    res.status(500).json({
+      error: "Error al ingresar la película.",
+      details: error.message,
+    });
   }
 };
 
@@ -51,15 +51,15 @@ export const getMovies = async (req, res) => {
 };
 
 export const getMovieById = async (req, res) => {
-  const { id } = req.params
+  const { id } = req.params;
   try {
-    const pool = await connectDatabase()
+    const pool = await connectDatabase();
     const result = await pool
       .request()
-      .input('id_pelicula', sql.VarChar, id)
-      .query('SELECT * FROM Administrador.Peliculas WHERE id_pelicula = @id_pelicula')
-
-
+      .input("id_pelicula", sql.VarChar, id)
+      .query(
+        "SELECT * FROM Administrador.Peliculas WHERE id_pelicula = @id_pelicula"
+      );
 
     if (result.rowsAffected.length > 0) {
       const movies = result.recordset.map((movie) => {
@@ -69,16 +69,16 @@ export const getMovieById = async (req, res) => {
         }
         return movie;
       });
-      return res.json({ data: movies })
+      return res.json({ data: movies });
     } else {
-      return res.status(400).json({ error: 'Lo sentimos, pelicula no encontrada.' })
+      return res
+        .status(400)
+        .json({ error: "Lo sentimos, pelicula no encontrada." });
     }
-
   } catch (error) {
-    return res.status(400).json({ message: 'Pelicula no encontrada.' })
-
+    return res.status(400).json({ message: "Pelicula no encontrada." });
   }
-}
+};
 
 export const updateMovie = async (req, res) => {
   const { id } = req.params;
@@ -110,22 +110,25 @@ export const updateMovie = async (req, res) => {
 };
 
 export const deleteMovie = async (req, res) => {
-  const { id } = req.params
+  const { id } = req.params;
   try {
-    const pool = await connectDatabase()
+    const pool = await connectDatabase();
     const result = await pool
       .request()
-      .input('id_pelicula', sql.Int, id)
-      .query("DELETE FROM Administrador.Peliculas WHERE id_pelicula = @id_pelicula")
+      .input("id_pelicula", sql.Int, id)
+      .query(
+        "DELETE FROM Administrador.Peliculas WHERE id_pelicula = @id_pelicula"
+      );
 
-    if (result.recordset.length > 0) {
-      return res.json({ message: 'Pelicula eliminada correctamente.' })
+    if (result.rowsAffected[0] === 0) {
+      return res.status(404).json({ error: "Película no encontrada." });
+    } else {
+      return res.json({ data: "Pelicula eliminada con exito." });
     }
-
   } catch (error) {
-    return res.status(400).json({ error: 'Error al eliminar pelicula.' })
+    return res.status(400).json({ error: "Error al eliminar pelicula." });
   }
-}
+};
 
 export const getMoviesWithReservations = async (req, res) => {
   try {
@@ -133,29 +136,42 @@ export const getMoviesWithReservations = async (req, res) => {
 
     const reservationsResult = await pool
       .request()
-      .query('SELECT id_pelicula FROM Administrador.Reservacion WHERE confirmado = 1');
-
+      .query(
+        "SELECT id_pelicula FROM Administrador.Reservacion WHERE confirmado = 1"
+      );
 
     if (reservationsResult.recordset.length === 0) {
-      return res.status(404).json({ message: "No se encontraron reservaciones confirmadas." });
+      return res
+        .status(404)
+        .json({ message: "No se encontraron reservaciones confirmadas." });
     }
 
-    const moviesIds = reservationsResult.recordset.map(reservation => reservation.id_pelicula);
+    const moviesIds = reservationsResult.recordset.map(
+      (reservation) => reservation.id_pelicula
+    );
 
     const moviesResult = await pool
       .request()
-      .query(`SELECT * FROM Administrador.Peliculas WHERE id_pelicula IN (${moviesIds.join(',')})`);
-
+      .query(
+        `SELECT * FROM Administrador.Peliculas WHERE id_pelicula IN (${moviesIds.join(
+          ","
+        )})`
+      );
 
     if (moviesResult.recordset.length === 0) {
-      return res.status(404).json({ message: "No se encontraron usuarios con reservaciones confirmadas." });
+      return res.status(404).json({
+        message: "No se encontraron usuarios con reservaciones confirmadas.",
+      });
     }
     res.status(200).json({
-      message: "Peliculas con reservaciones confirmadas obtenidos correctamente.",
+      message:
+        "Peliculas con reservaciones confirmadas obtenidos correctamente.",
       data: moviesResult.recordset,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error al obtener las peliculas con reservaciones confirmadas." });
+    res.status(500).json({
+      message: "Error al obtener las peliculas con reservaciones confirmadas.",
+    });
   }
 };
