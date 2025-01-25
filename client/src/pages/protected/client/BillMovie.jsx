@@ -269,9 +269,9 @@ export const BillMovie = () => {
                         <h2 className="text-2xl md:text-3xl font-bold mb-4">Combos de Comida</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {[
-                                { id: 1, nombre: "Combo 1", precio: 10 },
-                                { id: 2, nombre: "Combo 2", precio: 15 },
-                                { id: 3, nombre: "Combo 3", precio: 20 },
+                                { id: 1, nombre: "Combo 1", precio: 2 },
+                                { id: 2, nombre: "Combo 2", precio: 3 },
+                                { id: 3, nombre: "Combo 3", precio: 4 },
                             ].map((combo) => (
                                 <div
                                     key={combo.id}

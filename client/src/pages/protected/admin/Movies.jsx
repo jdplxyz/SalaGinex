@@ -72,13 +72,16 @@ export const Movies = () => {
       }
   
       setMessage("Película eliminada correctamente.");
-      setOpenMessageModal(!openMessageModal);
-  
+      setOpenMessageModal(true);
+
+      // Actualiza la lista de películas
       const updatedResponse = await fetch(`${API_URL}/peliculas`);
       const updatedMovies = await updatedResponse.json();
-  
-      if (updatedMovies) {
-        setDataMovie(updatedMovies.data);
+      setDataMovie(updatedMovies.data || []);
+
+ 
+      if (updatedMovies.data.length === 0) {
+        setSelectedDate("");
       }
     } catch (error) {
       console.error("Error al eliminar película:", error);
