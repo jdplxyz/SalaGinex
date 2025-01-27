@@ -16,7 +16,7 @@ const sendSmtpEmail = new brevo.SendSmtpEmail();
 
 export const Login = async (req, res) => {
   const { correo_electronico, clave } = req.body;
-  console.log(req.body);
+
   try {
     const pool = await connectDatabase();
     const result = await pool
@@ -216,16 +216,16 @@ const verifyExistUser = async (correo_electronico) => {
 };
 
 export const verifyToken = (req, res, next) => {
-  const token = req.cookies.token;
+  const token = req.cookies?.auth_token; 
   if (!token) {
-    return res.status(401).json({ message: "Acceso no autorizado" });
+    return res.status(401).json({ message: "Acceso no autorizado: Token no proporcionado" });
   }
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.user = decoded;
     next();
   } catch (error) {
-    res.status(401).json({ message: "Token inválido" });
+    return res.status(401).json({ message: "Token inválido" });
   }
 };
 
