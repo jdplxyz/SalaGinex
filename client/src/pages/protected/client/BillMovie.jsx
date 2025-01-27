@@ -337,7 +337,7 @@ export const BillMovie = () => {
               <div className="w-full flex flex-col gap-4">
                 <div className="w-full flex justify-between">
                   <h2 className="text-lg font-bold">Precio por Ticket:</h2>
-                  <p className="text-lg">${(pricePerTicket * currencyRate).toFixed(2)}</p>
+                  <p className="text-lg">$ 2</p>
                 </div>
                 <div className="w-full flex justify-between">
                   <h2 className="text-lg font-bold">Cantidad de Tickets:</h2>
