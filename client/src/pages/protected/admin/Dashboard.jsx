@@ -18,7 +18,12 @@ export const Dashboard = () => {
 
   const getUserData = async () => {
     try {
-      const response = await fetch(`${API_URL}/users`);
+      const response = await fetch(`${API_URL}/users`,{
+        method:'GET',
+        headers:{
+          'Authorization': `Bearer ${token}`,
+        }
+      });
       const data = await response.json();
       if (!response.ok) {
         console.log("error");
@@ -31,7 +36,12 @@ export const Dashboard = () => {
 
   const getOrdenConfirmated = async () => {
     try {
-      const response = await fetch(`${API_URL}/orden`);
+      const response = await fetch(`${API_URL}/orden`,{
+        method:'GET',
+        headers:{
+          'Authorization': `Bearer ${token}`,
+        }
+      });
       const data = await response.json();
       if (!response.ok) {
         console.log("error");

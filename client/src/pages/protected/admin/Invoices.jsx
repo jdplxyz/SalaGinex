@@ -33,7 +33,12 @@ export const Invoices = () => {
     const getOrdenConfirmated = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`${API_URL}/orden`);
+            const response = await fetch(`${API_URL}/orden`,{
+                method:'GET',
+                headers:{
+                  'Authorization': `Bearer ${token}`,
+                }
+              });
             if (!response.ok) {
                 throw new Error('Error al obtener los datos');
             }
@@ -51,7 +56,12 @@ export const Invoices = () => {
 
     const getUsersWithReservations = async () => {
         try {
-            const response = await fetch(`${API_URL}/users/reservacion`);
+            const response = await fetch(`${API_URL}/users/reservacion`,{
+                method:'GET',
+                headers:{
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
             const data = await response.json();
             if (!response.ok) {
                 console.log('Error al obtener usuarios con reservaciones');
@@ -64,7 +74,12 @@ export const Invoices = () => {
 
     const getMoviesWithReservations = async () => {
         try {
-            const response = await fetch(`${API_URL}/peliculas/reservacion`);
+            const response = await fetch(`${API_URL}/peliculas/reservacion`,{
+                method:'GET',
+                headers:{
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
             const data = await response.json();
             if (!response.ok) {
                 console.log('Error al obtener películas con reservaciones');

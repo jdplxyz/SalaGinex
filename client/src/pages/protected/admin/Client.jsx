@@ -56,6 +56,7 @@ export const ClientAdmin = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(newUser),
         credentials: "include",
@@ -86,6 +87,7 @@ export const ClientAdmin = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ email }),
         credentials: "include",
@@ -130,6 +132,7 @@ export const ClientAdmin = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(updatedUser),
       });
@@ -152,6 +155,9 @@ export const ClientAdmin = () => {
     try {
       const response = await fetch(`${API_URL}/users/${id}`, {
         method: "DELETE",
+        headers:{
+          'Authorization': `Bearer ${token}`,
+        }
       });
       if (response.ok) {
         setMessage("Cliente eliminado satisfactoriamente.");

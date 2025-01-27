@@ -11,6 +11,7 @@ export const BillTicket = () => {
     const [messageConfirmated, setMessageConfirmated] = useState('');
     const [modalConfirmated, setModalConfirmated] = useState(false);
     const [user, setUser] = useState({});
+    const token = localStorage.getItem('auth_token')
 
     useEffect(() => {
         if (error || modalConfirmated) {
@@ -26,7 +27,13 @@ export const BillTicket = () => {
 
     const getUserData = async () => {
         try {
-            const response = await fetch(`${API_URL}/users`);
+            const response = await fetch(`${API_URL}/users`, {
+                method:'GET',
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                }
+              });
+            
             const data = await response.json();
             if (!response.ok) {
                 console.log("error");
@@ -45,7 +52,8 @@ export const BillTicket = () => {
             const response = await fetch(`${API_URL}/orden`, {
                 method: 'POST',
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({ code: code }),
                 credentials: 'include'
@@ -91,7 +99,8 @@ export const BillTicket = () => {
             const response = await fetch(`${API_URL}/orden`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 },
                 body: JSON.stringify({ confirmado: 1, codigo: ordenData.codigo }),
                 credentials: 'include'
