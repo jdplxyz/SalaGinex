@@ -9,6 +9,8 @@ import multer from "multer";
 import nodemailer from "nodemailer";
 import path from "path";
 import { fileURLToPath } from "url";
+import { verify } from "crypto";
+import { verifyToken } from "./controllers/usuarioController.js";
 
 const upload = multer();
 export const app = express();
@@ -41,5 +43,5 @@ app.use(usuariosRoute);
 app.use(peliculasRoute);
 app.use(reservacionRoute);
 
-app.post("/peliculas", upload.single("posterImg"), addMovie);
-app.post("/reservacion", addReservation);
+app.post("/peliculas", verifyToken,upload.single("posterImg"), addMovie);
+app.post("/reservacion", verifyToken,addReservation);
