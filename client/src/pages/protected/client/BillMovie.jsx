@@ -20,7 +20,7 @@ export const BillMovie = () => {
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [reservationCode, setReservationCode] = useState("");
   const [reservationError, setReservationError] = useState("");
-
+  const token = localStorage.getItem('auth-token');
   const pricePerTicket = 2;
   const pricePerCombo = 4;
   const navigate = useNavigate();
@@ -32,7 +32,13 @@ export const BillMovie = () => {
   }, []);
 
   const getMovie = async () => {
-    const response = await fetch(`${API_URL}/pelicula/${id}`);
+    
+    const response = await fetch(`${API_URL}/pelicula/${id}`,{
+      method:'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
     const data = await response.json();
     if (!response.ok) {
       console.error("Película no encontrada.");
@@ -43,7 +49,13 @@ export const BillMovie = () => {
 
   const getSeatReservated = async () => {
     try {
-      const response = await fetch(`${API_URL}/asientos/${id}`);
+      const response = await fetch(`${API_URL}/asientos/${id}`,{
+        method:'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        }
+      }
+      );
       if (!response.ok) {
         console.error("Error:", response.statusText);
         return;

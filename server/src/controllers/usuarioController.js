@@ -216,14 +216,20 @@ const verifyExistUser = async (correo_electronico) => {
 };
 
 export const verifyToken = (req, res, next) => {
-  const token = req.cookies?.auth_token; 
+  // Obtener el encabezado Authorization
+  const authHeader = req.headers['authorization'];
+
+  // Verificar si el encabezado existe y tiene el formato correcto
+  const token = authHeader && authHeader.split(' ')[1]; // Separar "Bearer" del token
   if (!token) {
     return res.status(401).json({ message: "Acceso no autorizado: Token no proporcionado" });
   }
+
+  // Verificar el token
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    req.user = decoded;
-    next();
+    req.user = decoded; // Adjuntar la información del usuario decodificada a la solicitud
+    next(); // Continuar con la siguiente función (controlador)
   } catch (error) {
     return res.status(401).json({ message: "Token inválido" });
   }
