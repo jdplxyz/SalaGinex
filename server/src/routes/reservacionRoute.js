@@ -8,5 +8,6 @@ router.get('/asientos/:id',getSeatReservated)
 router.post('/orden',getOrderReservated)
 router.put('/orden',updateOrdenReservated)
 router.get('/orden',getOrdenConfirmated)
+router.get('/export',getHistorialToExport)
 
 export default router

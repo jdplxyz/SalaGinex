@@ -120,3 +120,31 @@ export const getOrdenConfirmated = async(req,res) =>{
     }
 }
 
+export const getHistorialToExport = async(req,res) =>{
+    try{
+        const pool = await connectDatabase()
+        const result = await pool
+        .request()
+        .query(`SELECT 
+    r.id_reservacion,
+    r.fecha_reserva,
+    r.codigo,
+    r.total,
+    r.asientos,
+    r.combos,
+    p.titulo AS titulo_pelicula,
+    u.nombre AS nombre_usuario,
+    u.apellido AS apellido_usuario
+FROM 
+    Administrador.Reservacion r
+JOIN 
+    Administrador.Peliculas p ON r.id_pelicula = p.id_pelicula
+JOIN 
+    Administrador.Usuario u ON r.id_usuario = u.id_usuario
+WHERE 
+    r.confirmado = 1`)
+        res.json({data:result})
+    }catch(error){
+        console.error(error)
+    }
+}

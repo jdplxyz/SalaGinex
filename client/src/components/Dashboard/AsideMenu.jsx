@@ -11,7 +11,7 @@ const AsideMenu = () => {
   };
 
   return (
-    <aside className="w-[100%] h-[8%] shadow-lg sticky top-[92%] left-[5%] sm:top-[0] sm:w-[20%] sm:h-[90%] sm:left-0 md:w-[15%] lg:w-[15%] xl:w-[10%] 2xl:w-[8%]">
+    <aside className="w-[100%] h-[10%] mt-[100px] shadow-lg sticky top-[92%] left-[5%] sm:top-[0] sm:w-[20%] sm:h-[90%] sm:left-0 md:w-[15%] lg:w-[15%] xl:w-[10%] 2xl:w-[8%]">
       <nav className="w-[100%] h-[100%]">
         <ul className="w-[100%] h-[100%] flex justify-between items-center p-5 sm:flex-col sm:justify-start sm:gap-[30px]">
           <li className="w-[100%]">

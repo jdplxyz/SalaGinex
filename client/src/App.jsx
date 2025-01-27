@@ -22,7 +22,7 @@ export default function App() {
     <CurrencyProviderWraper>
     <AuthProvider>
       <Header />
-      <div className="w-full h-[100%] bg-white">
+      
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/login" element={<Login />}></Route>
@@ -55,7 +55,7 @@ export default function App() {
             element={<ProtectedRoutesAdmin children={<BillTicket/>} />}
           ></Route>
         </Routes>
-      </div>
+      
       </AuthProvider>
       </CurrencyProviderWraper>
     </>

@@ -54,23 +54,23 @@ export const Movies = () => {
 
   const handleDeleteMovie = async (movie) => {
     const { id_pelicula } = movie;
-  
+
     if (!id_pelicula) {
       console.error("ID de película no válido");
       return;
     }
-  
+
     try {
       const response = await fetch(`${API_URL}/pelicula/${id_pelicula}`, {
         method: "DELETE",
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Error al eliminar película:", errorData);
         return;
       }
-  
+
       setMessage("Película eliminada correctamente.");
       setOpenMessageModal(true);
 
@@ -79,10 +79,10 @@ export const Movies = () => {
       const updatedMovies = await updatedResponse.json();
       setDataMovie(updatedMovies.data || []);
 
- 
-      if (updatedMovies.data.length === 0) {
-        setSelectedDate("");
-      }
+
+
+
+
     } catch (error) {
       console.error("Error al eliminar película:", error);
     }
@@ -191,6 +191,8 @@ export const Movies = () => {
           sinopsis: "",
           poster: null,
         });
+        setMessage("Pelicula agregada correctamente.")
+        setOpenMessageModal(true)
       } else {
         setMessage("Error al agregar la película.");
         setOpenMessageModal(true);
@@ -201,62 +203,50 @@ export const Movies = () => {
   };
 
   return (
-    <>
-      <section className="w-full h-screen p-5 ">
-        {/* Header */}
-        <header className="w-full flex  md:flex-row justify-between items-center mb-5 sm:w-[80%] md:w-[75%]  lg:w-[65%] xl:w-[55%] sm:mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold">Registro de Películas</h2>
-          <Link to="/dashboard" className="mt-4 md:mt-0">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
-              />
-            </svg>
-          </Link>
-        </header>
-
-        {/* Filtro de fecha */}
-        <div className="w-full mb-5 sm:w-[80%] md:w-[75%] lg:w-[65%] xl:w-[55%] sm:mx-auto">
-          <select
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className="w-full md:w-1/2 p-2 border rounded"
+    <section className="w-[100%] h-screen bg-white">
+      <header className="w-[100%] p-5 mx-auto flex justify-between items-center md:flex-row  mb-5 sm:w-[95%] md:w-[85%] lg:w-[75%] xl:w-[65%] sm:mx-auto">
+        <h2 className="text-2xl md:text-3xl font-bold">Registro de Películas</h2>
+        <Link to="/dashboard" >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
           >
-            <option value="">Selecciona una fecha</option>
-            <option value={weekendDates.nextFriday}>Viernes ({weekendDates.nextFriday})</option>
-            <option value={weekendDates.nextSaturday}>Sábado ({weekendDates.nextSaturday})</option>
-            <option value={weekendDates.nextSunday}>Domingo ({weekendDates.nextSunday})</option>
-          </select>
-        </div>
-
-        {/* Lista de películas o formulario para agregar nueva película */}
-        <main className="w-full sm:w-[85%] md:w-[75%] lg:w-[65%]  xl:w-[55%] mx-auto ">
-          {filteredMovies.length > 0 ? (
-            <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filteredMovies.map((movie, index) => (
-                <div key={index} className="w-full h-full sm:h-[100%] bg-white shadow-lg p-5 rounded-lg">
-                  <img className="w-full h-78  sm:h-[50%] object-cover rounded-lg" src={movie.poster} alt={`Poster ${movie.titulo}`} />
-                  <div className="w-full flex justify-between p-2">
-                    <h2 className="text-xl font-medium">{movie.titulo}</h2>
-                    <p className="text-md text-gray-500">{movie.genero}</p>
-                  </div>
-                  <div className="w-full flex justify-between p-2">
-                    <p className="font-medium">Fecha: {selectedDate}</p>
-                    <p className="text-md text-gray-500">{movie.hora_transmision}</p>
-                  </div>
-                  <p className="p-2 w-full text-md text-gray-600 font-light">
-                    {movie.sinopsis}
-                  </p>
-                  <div className="w-full flex gap-2 p-2">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+            />
+          </svg>
+        </Link>
+      </header>
+      <div className="w-full px-5 mb-5 sm:w-[95%] md:w-[85%] lg:w-[75%] xl:w-[65%] sm:mx-auto">
+        <select
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+          className="w-full md:w-1/2 p-4 border rounded"
+        >
+          <option value="" className="sm:text-xl">Selecciona una fecha</option>
+          <option value={weekendDates.nextFriday} className="sm:text-xl">Viernes ({weekendDates.nextFriday})</option>
+          <option value={weekendDates.nextSaturday} className="sm:text-xl">Sábado ({weekendDates.nextSaturday})</option>
+          <option value={weekendDates.nextSunday} className="sm:text-xl">Domingo ({weekendDates.nextSunday})</option>
+        </select>
+      </div>
+      <main className="w-[100%] px-5 sm:w-[95%] md:w-[85%] lg:w-[75%] xl:w-[65%] mx-auto">
+        {filteredMovies.length > 0 ?
+          <div className="w-[100%] bg-black flex flex-col bg-white sm:grid sm:grid-cols-2 lg:grid-cols-3">
+            {filteredMovies.map((movie, index) => (
+              <article key={movie.id_pelicula} className="w-[100%] flex flex-col shadow-lg p-5">
+                <img src={`${movie.poster}`} alt={`Poster ${movie.titulo}`} />
+                <div className="w-[100%] flex justify-between items-center gap-2 py-3 px-1">
+                  <h2 className="text-2xl font-medium">{movie.titulo}</h2>
+                  <p className="text-lg text-gray-500">{movie.genero}</p>
+                </div>
+                <p className="p-2 w-full text-md text-gray-600 font-medium">{movie.sinopsis}</p>
+                <div className="w-full flex gap-2 p-2">
                     <a className="cursor-pointer" onClick={() => handleDeleteMovie(movie)}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -294,22 +284,23 @@ export const Movies = () => {
                       </svg>
                     </a>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <form onSubmit={handleAddMovie} className="w-full  flex flex-col gap-5 ">
+              </article>
+            ))}
+          </div>
+          :
+          <div className="w-[100%] h-screen">
+            <form onSubmit={handleAddMovie} className="w-full flex flex-col gap-5">
               <h2 className="text-xl font-bold">Agregar Nueva Película</h2>
               <div className="w-full">
-              <input
-                type="text"
-                name="titulo"
-                placeholder="Título"
-                value={newMovie.titulo}
-                onChange={handleNewMovieChange}
-                className="p-2 border rounded w-full" 
-                required
-              />
+                <input
+                  type="text"
+                  name="titulo"
+                  placeholder="Título"
+                  value={newMovie.titulo}
+                  onChange={handleNewMovieChange}
+                  className="p-4  border rounded w-full sm:text-xl"
+                  required
+                />
               </div>
               <input
                 type="text"
@@ -317,7 +308,7 @@ export const Movies = () => {
                 placeholder="Género"
                 value={newMovie.genero}
                 onChange={handleNewMovieChange}
-                className="p-2 border rounded"
+                className="p-4  border rounded sm:text-xl"
                 required
               />
               <input
@@ -325,14 +316,14 @@ export const Movies = () => {
                 name="fecha_transmision"
                 value={newMovie.fecha_transmision}
                 onChange={handleNewMovieChange}
-                className="p-2 border rounded"
+                className="p-4  border rounded sm:text-xl"
                 required
               />
               <select
                 name="hora_transmision"
                 value={newMovie.hora_transmision}
                 onChange={handleNewMovieChange}
-                className="p-2 border rounded"
+                className="p-4  border rounded sm:text-xl"
                 required
               >
                 <option value="5:00 PM">5:00 PM</option>
@@ -344,115 +335,112 @@ export const Movies = () => {
                 placeholder="Sinopsis"
                 value={newMovie.sinopsis}
                 onChange={handleNewMovieChange}
-                className="p-2 border rounded"
+                className="p-4  border rounded sm:text-xl"
                 required
               />
               <input
                 type="file"
                 name="poster"
                 onChange={handleNewMovieChange}
-                className="p-2 border rounded"
+                className="p-4  border rounded sm:text-xl"
                 required
               />
               <button
                 type="submit"
-                className="p-2 bg-[#010739] text-white rounded"
+                className="p-4  bg-[#010739] text-white text-xl font-medium rounded sm:w-[50%] md:w-[30%] sm:p-3"
               >
                 Agregar Película
               </button>
             </form>
-          )}
-        </main>
-
-        {/* Modal de edición */}
-        {modalOpen && selectedMovie && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center w-full">
-            <div className="bg-white p-5 rounded-lg w-[90%] max-w-md">
-              <h2 className="text-xl font-bold mb-5">Editar Película</h2>
-              <form onSubmit={handleUpdate} className="flex flex-col gap-3">
-                <input
-                  type="text"
-                  placeholder="Título"
-                  value={selectedMovie.titulo}
-                  onChange={(e) =>
-                    setSelectedMovie({ ...selectedMovie, titulo: e.target.value })
-                  }
-                  className="p-2 border rounded"
-                />
-                <input
-                  type="text"
-                  placeholder="Género"
-                  value={selectedMovie.genero}
-                  onChange={(e) =>
-                    setSelectedMovie({ ...selectedMovie, genero: e.target.value })
-                  }
-                  className="p-2 border rounded"
-                />
-                <input
-                  type="date"
-                  value={selectedMovie.fecha_transmision}
-                  onChange={(e) =>
-                    setSelectedMovie({
-                      ...selectedMovie,
-                      fecha_transmision: e.target.value,
-                    })
-                  }
-                  className="p-2 border rounded"
-                />
-                <select
-                  value={selectedMovie.hora_transmision}
-                  onChange={(e) =>
-                    setSelectedMovie({
-                      ...selectedMovie,
-                      hora_transmision: e.target.value,
-                    })
-                  }
-                  className="p-2 border rounded"
+          </div>}
+      </main>
+      {modalOpen && selectedMovie && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center w-full">
+          <div className="bg-white p-5 rounded-lg w-[90%] max-w-md">
+            <h2 className="text-xl font-bold mb-5">Editar Película</h2>
+            <form onSubmit={handleUpdate} className="flex flex-col gap-3">
+              <input
+                type="text"
+                placeholder="Título"
+                value={selectedMovie.titulo}
+                onChange={(e) =>
+                  setSelectedMovie({ ...selectedMovie, titulo: e.target.value })
+                }
+                className="p-2 border rounded"
+              />
+              <input
+                type="text"
+                placeholder="Género"
+                value={selectedMovie.genero}
+                onChange={(e) =>
+                  setSelectedMovie({ ...selectedMovie, genero: e.target.value })
+                }
+                className="p-2 border rounded"
+              />
+              <input
+                type="date"
+                value={selectedMovie.fecha_transmision}
+                onChange={(e) =>
+                  setSelectedMovie({
+                    ...selectedMovie,
+                    fecha_transmision: e.target.value,
+                  })
+                }
+                className="p-2 border rounded"
+              />
+              <select
+                value={selectedMovie.hora_transmision}
+                onChange={(e) =>
+                  setSelectedMovie({
+                    ...selectedMovie,
+                    hora_transmision: e.target.value,
+                  })
+                }
+                className="p-2 border rounded"
+              >
+                <option value="5:00 PM">5:00 PM</option>
+                <option value="7:00 PM">7:00 PM</option>
+                <option value="9:00 PM">9:00 PM</option>
+              </select>
+              <textarea
+                placeholder="Sinopsis"
+                value={selectedMovie.sinopsis}
+                onChange={(e) =>
+                  setSelectedMovie({
+                    ...selectedMovie,
+                    sinopsis: e.target.value,
+                  })
+                }
+                className="p-2 border rounded"
+              />
+              <div className="flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setModalOpen(false)}
+                  className="p-2 bg-gray-500 text-white rounded"
                 >
-                  <option value="5:00 PM">5:00 PM</option>
-                  <option value="7:00 PM">7:00 PM</option>
-                  <option value="9:00 PM">9:00 PM</option>
-                </select>
-                <textarea
-                  placeholder="Sinopsis"
-                  value={selectedMovie.sinopsis}
-                  onChange={(e) =>
-                    setSelectedMovie({
-                      ...selectedMovie,
-                      sinopsis: e.target.value,
-                    })
-                  }
-                  className="p-2 border rounded"
-                />
-                <div className="flex justify-end gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setModalOpen(false)}
-                    className="p-2 bg-gray-500 text-white rounded"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className="p-2 bg-blue-500 text-white rounded"
-                  >
-                    Guardar
-                  </button>
-                </div>
-              </form>
-            </div>
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="p-2 bg-blue-500 text-white rounded"
+                >
+                  Guardar
+                </button>
+              </div>
+            </form>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Modal de mensaje */}
-        {openMessageModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center w-full">
-            <div className="bg-white p-5 rounded-lg w-[90%] max-w-md">
-              <p>{message}</p>
-            </div>
+      {/* Modal de mensaje */}
+      {openMessageModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center w-full">
+          <div className="bg-white p-5 rounded-lg w-[90%] max-w-md">
+            <p>{message}</p>
           </div>
-        )}
-      </section>
-    </>
+        </div>
+      )}
+    </section>
   );
 };

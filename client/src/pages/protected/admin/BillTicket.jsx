@@ -168,11 +168,11 @@ export const BillTicket = () => {
                                 </li>
                                 <li className="flex items-center justify-between gap-2">
                                     <p className="text-left text-lg font-medium">Total: </p>
-                                    <small className="text-[15px]">${ordenData.total}</small>
+                                    <small className="text-[15px]">{(ordenData.total / 60).toFixed(2)} $</small>
                                 </li>
                                 <li className="flex items-center justify-between gap-2">
                                     <p className="text-left text-lg font-medium">Total BS: </p>
-                                    <small className="text-[15px]">{ordenData.total * 60} BS</small>
+                                    <small className="text-[15px]">{ordenData.total} Bs</small>
                                 </li>
                             </ul>
 

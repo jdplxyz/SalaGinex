@@ -4,6 +4,7 @@ import QRCode from "react-qr-code";
 import jsPDF from "jspdf";
 import { API_URL } from "../../../utils/ApiUrl";
 import { CurrencyContext } from "../../../contexts/CurrencyContext";
+import * as XLSX from 'xlsx';
 
 export const Invoices = () => {
     const [ordenData, setOrdenData] = useState([]);
@@ -75,22 +76,10 @@ export const Invoices = () => {
     };
 
     const formatDate = (dateString) => {
-        let date;
-
-        if (dateString.includes("T") && dateString.includes("Z")) {
-            date = new Date(dateString); // Crear fecha directamente desde formato ISO
-        } else {
-            date = new Date(dateString + "T00:00:00"); // Añadir hora local para evitar problemas de zona horaria
-        }
-
-        if (isNaN(date.getTime())) {
-            console.error("Fecha no válida:", dateString);
-            return "Fecha no válida";
-        }
-
-        const day = date.getDate().toString().padStart(2, "0");
-        const month = (date.getMonth() + 1).toString().padStart(2, "0");
-        const year = date.getFullYear();
+        const date = new Date(dateString);
+        const day = date.getUTCDate().toString().padStart(2, "0");
+        const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+        const year = date.getUTCFullYear();
         return `${day}/${month}/${year}`;
     };
 
@@ -131,6 +120,90 @@ export const Invoices = () => {
         );
         setFilteredOrders(updateOrdersPerDate);
         updateCurrentOrders(updateOrdersPerDate, currentPage);
+    };
+
+    const formatAsientos = (asientos) => {
+        if (!Array.isArray(asientos)) return ""; // Si no es un array, devuelve una cadena vacía
+        return asientos.join(", "); // Convierte el array en una cadena separada por comas
+    };
+    
+    const formatCombos = (combos) => {
+        if (!Array.isArray(combos)) return ""; // Si no es un array, devuelve una cadena vacía
+        return combos.map((combo) => combo.nombre).join(", "); // Extrae los nombres de los combos y los une con comas
+    };
+    
+    const handleExport = async () => {
+        try {
+            const response = await fetch(`${API_URL}/export`);
+            const data = await response.json();
+            console.log("Respuesta de la API:", data); // Depuración
+    
+            // Ajusta esta línea según la estructura de la API
+            const orders = data.data.recordset; // O data.orders, o simplemente data
+            console.log("Órdenes:", orders); // Depuración
+    
+            if (!Array.isArray(orders)) {
+                throw new Error("Las órdenes no son un array");
+            }
+    
+            // Modificar las órdenes para convertir asientos y combos en cadenas de texto
+            const formattedOrders = orders.map((order) => ({
+                ...order,
+                asientos: formatAsientos(JSON.parse(order.asientos || "[]")), // Convertir asientos a cadena
+                combos: formatCombos(JSON.parse(order.combos || "[]")), // Convertir combos a cadena
+            }));
+    
+            // Organizar las órdenes por mes
+            const ordersPerMonth = ordenPerMonth(formattedOrders);
+    
+            // Exportar a Excel
+            exportExcel(ordersPerMonth);
+        } catch (error) {
+            console.error("Error al exportar a Excel:", error);
+        }
+    };
+    
+    const ordenPerMonth = (orders) => {
+        if (!Array.isArray(orders)) {
+            console.error("Las órdenes no son un array:", orders);
+            return {};
+        }
+    
+        const ordersPerMonth = {};
+        orders.forEach((order) => {
+            const date = new Date(order.fecha_reserva);
+            const month = date.getMonth() + 1;
+            const year = date.getFullYear();
+            const key = `${year}-${month}`;
+    
+            if (!ordersPerMonth[key]) {
+                ordersPerMonth[key] = [];
+            }
+            ordersPerMonth[key].push(order);
+        });
+        return ordersPerMonth;
+    };
+    
+    const exportExcel = (ordersPerMonth) => {
+        Object.keys(ordersPerMonth).forEach((mes) => {
+            const orders = ordersPerMonth[mes];
+    
+            // Reordenar las columnas para que "total" esté al final
+            const reorderedOrders = orders.map((order) => {
+                const { total, ...rest } = order; // Extraer "total" del objeto
+                return { ...rest, total }; // Colocar "total" al final
+            });
+    
+            // Crear una hoja de Excel con las órdenes reordenadas
+            const ws = XLSX.utils.json_to_sheet(reorderedOrders);
+    
+            // Crear un libro de Excel y agregar la hoja
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, `Ordenes_${mes}`);
+    
+            // Guardar el archivo Excel
+            XLSX.writeFile(wb, `Ordenes_${mes}.xlsx`);
+        });
     };
 
     const generatePDF = () => {
@@ -195,8 +268,7 @@ export const Invoices = () => {
     if (loading) return <p>Cargando...</p>;
     if (error) return <p>Error: {error}</p>;
 
-    console.log(currentsOrden)
-    console.log(usersWithReservations)
+  
     return (
         <section className="w-full min-h-screen p-5 bg-gray-100 md:flex md:flex-col md:items-center ">
            
@@ -223,11 +295,14 @@ export const Invoices = () => {
             {/* Filtro de fecha */}
             <div className="w-full mb-5 sm:w-[85%] lg:w-[75%]">
                 <p className="text-lg font-bold sm:text-2xl ">Seleccionar fechas: </p>
+                <div className="w-full flex justify-between gap-2">
                 <input
                     type="date"
                     className="w-full md:w-1/2 border p-3 rounded mt-2 text-2xl"
                     onChange={(e) => setDataSelected(e.target.value)}
                 />
+                <button className="p-2 sm:p-3 bg-[#010739] text-white rounded  font-medium text-[20px]" onClick={handleExport}>Exportar Historial</button>
+                </div>
             </div>
 
             {/* Lista de órdenes */}

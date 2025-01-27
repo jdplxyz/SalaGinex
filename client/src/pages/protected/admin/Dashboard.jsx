@@ -94,10 +94,11 @@ export const Dashboard = () => {
 
   const recentOrders = ordersConfirmated
     .sort((a, b) => new Date(b.fecha_reserva) - new Date(a.fecha_reserva))
-    .slice(0, width < 400 ? 1 : 3);
+    .slice(0, width < 400 ? 2 : 4);
+
 
   return (
-    <section className="w-[100%] h-[100%] relative flex flex-col items-center justify-start sm:flex-row sm:overflow-y-hidden">
+    <section className="w-[100%] h-screen bg-white relative flex flex-col items-center justify-start sm:flex-row sm:overflow-y-hidden">
       <AsideMenu />
       <div className="w-[100%] h-[75%] flex flex-col gap-4 absolute top-5 sm:w-[70%] md:w-[75%] lg:w-[80%]  sm:left-[25%] sm:top-[7%] md:left-[20%] xl:left-[13%]">
         <header className="w-[100%] flex px-5 items-center gap-3">
@@ -141,10 +142,10 @@ export const Dashboard = () => {
                   </svg>
                 </header>
                 {currencySwitch ? (
-                  <p className="text-2xl font-bold">{moneyIncome} $</p>
+                  <p className="text-2xl font-bold">{moneyIncome} Bs</p>
                 ) : (
                   <p className="text-2xl font-bold">
-                    {moneyIncome * currencyRate} BS
+                    {moneyIncome / currencyRate} $
                   </p>
                 )}
             </article>
@@ -157,10 +158,10 @@ export const Dashboard = () => {
           <header className="w-[100%]">
           <h2 className="text-gray-500 text-2xl">Ventas Recientes</h2>
           </header>
-          <article className="w-[100%] h-[100%]">
+          <article className="w-[100%] h-[100%] mt-6 lg:mt-6 md:mt-6">
           {recentOrders.length > 0 ? (
                   <ul className="w-full flex flex-col gap-4">
-                    {lastThreeOrders.map((order, index) => {
+                    {recentOrders.map((order, index) => {
                       const user = userData.find(
                         (user) => user.id_usuario === order.id_usuario
                       );
