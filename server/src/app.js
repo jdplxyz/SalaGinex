@@ -16,19 +16,19 @@ export const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Configuración de CORS
+
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://salaginex.netlify.app"],
+    origin: ["http://localhost:5173", "https://sala-ginex.vercel.app/"],
     credentials: true,
   })
 );
 
 const transporter = nodemailer.createTransport({
-  service: "Gmail", // Puedes usar otros servicios como Outlook, Yahoo, etc.
+  service: "Gmail", 
   auth: {
-    user: process.env.EMAIL_USER, // Tu correo electrónico
-    pass: process.env.EMAIL_PASSWORD, // Tu contraseña de aplicación (no la contraseña de tu correo)
+    user: process.env.EMAIL_USER, 
+    pass: process.env.EMAIL_PASSWORD, 
   },
 });
 
