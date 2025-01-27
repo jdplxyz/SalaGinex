@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename);
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://sala-ginex.vercel.app/"],
+    origin: ["http://localhost:5173", "https://sala-ginex-blwfh86yw-jdplxyzs-projects.vercel.app"],
     credentials: true,
   })
 );
