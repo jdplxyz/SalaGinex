@@ -20,7 +20,7 @@ export const BillMovie = () => {
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const [reservationCode, setReservationCode] = useState("");
   const [reservationError, setReservationError] = useState("");
-  const token = localStorage.getItem('auth-token');
+  const token = localStorage.getItem('auth_token');
   const pricePerTicket = 2;
   const pricePerCombo = 4;
   const navigate = useNavigate();
