@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { QRCode } from "react-qr-code";
 import { CurrencyContext } from "../../../contexts/CurrencyContext";
 import { API_URL } from "../../../utils/ApiUrl";
+import imagen from '/public/popcorn.png'
 
 export const BillMovie = () => {
   const { id } = useParams();
@@ -311,7 +312,7 @@ export const BillMovie = () => {
                     <p className="text-lg lg:text-2xl">Precio Bs: {(combo.precio * currencyRate).toFixed(2)}</p>
                     <p className="text-lg lg:text-2xl">Precio $: {(combo.precio).toFixed(2)}</p>
                     </div>
-                    <img src="../public/popcorn.png" alt="Porpcorn"  className="w-[110px] h-[110px]"/>
+                    <img src={imagen} alt="Porpcorn"  className="w-[110px] h-[110px]"/>
                   </div>
                 ))}
               </div>

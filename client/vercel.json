@@ -1,0 +1,18 @@
+{
+    "routes": [
+      {
+        "src": "/old-url",
+        "dest": "/new-url",
+        "statusCode": 301
+      },
+      {
+        "src": "/blog/(.*)",
+        "dest": "/blog-post?id=$1"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/index.html",
+        "statusCode": 200
+      }
+    ]
+  }
