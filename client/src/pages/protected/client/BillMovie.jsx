@@ -274,7 +274,7 @@ export const BillMovie = () => {
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-800">{movie.titulo}</h2>
                 <div className="w-full flex flex-col gap-2">
                   <label htmlFor="cantidad" className="text-lg font-bold text-gray-700">
-                    Cantidad:
+                    Cantidad de ticket:
                   </label>
                   <input
                     type="number"
