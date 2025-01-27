@@ -24,11 +24,11 @@ router.get("/protected", verifyToken, (req, res) => {
   res.json({ message: "Acceso permitido", user: req.user });
 });
 
-router.get("/users", getAllUsers);
-router.post("/usersByEmail", getUserByEmail);
-router.delete("/users/:id", deleteUserById);
-router.put("/users/:id", updateUserById);
-router.get("/users/reservacion", getUsersWithReservations);
-router.post("/recuperar", sendMail);
+router.get("/users", verifyToken,getAllUsers);
+router.post("/usersByEmail", verifyToken,getUserByEmail);
+router.delete("/users/:id", verifyToken,deleteUserById);
+router.put("/users/:id", verifyToken,updateUserById);
+router.get("/users/reservacion", verifyToken,getUsersWithReservations);
+router.post("/recuperar",sendMail);
 router.put("/reset", resetPassword);
 export default router;

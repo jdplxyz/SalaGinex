@@ -21,7 +21,7 @@ export const Login = () => {
       const timer = setTimeout(()=>{
         setMessage("")
         setClave("")
-      },2000)
+      },1000)
       return ()=> clearTimeout(timer)
   },[message])
 
