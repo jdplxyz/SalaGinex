@@ -19,6 +19,7 @@ export const Movies = () => {
     sinopsis: "",
     poster: null,
   });
+  const token = localStorage.getItem('auth_token')
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -182,6 +183,9 @@ export const Movies = () => {
     try {
       const response = await fetch(`${API_URL}/peliculas`, {
         method: "POST",
+        headers:{
+          'Authorization': `Bearer ${token}`,
+        },
         body: formData,
       });
 

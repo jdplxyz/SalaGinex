@@ -25,6 +25,7 @@ export const BillMovie = () => {
   const pricePerCombo = 4;
   const navigate = useNavigate();
 
+  
   const { currencyRate, getRateCurrency } = useContext(CurrencyContext);
 
   useEffect(() => {
@@ -194,7 +195,6 @@ export const BillMovie = () => {
       codigo: uniqueCode,
     };
 
-    const token = localStorage.getItem("token");
 
     const response = await fetch(`${API_URL}/reservacion`, {
       method: "POST",

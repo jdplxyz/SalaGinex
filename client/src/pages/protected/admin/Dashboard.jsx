@@ -11,7 +11,7 @@ export const Dashboard = () => {
   const [ordersConfirmated, setOrdersConfirmated] = useState([]);
   const [moneyIncome, setMoneyIncome] = useState(0);
   const [currencySwitch, setCurrencySwitch] = useState(false);
-
+  const token = localStorage.getItem('auth_token')
   const { currencyRate, getRateCurrency } = useContext(CurrencyContext);
   const {width} = useWindowsDimension()
 

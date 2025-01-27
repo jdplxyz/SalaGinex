@@ -21,6 +21,7 @@ export const ClientAdmin = () => {
   });
   const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual
   const clientsPerPage = 5; // Número de clientes por página
+  const token = localStorage.getItem('auth_token')
 
   useEffect(() => {
     const timer = setTimeout(() => {
