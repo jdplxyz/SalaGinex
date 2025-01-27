@@ -152,7 +152,8 @@ export const BillTicket = () => {
                             <ul className="w-full flex flex-col justify-center mt-5 px-2">
                                 <li className="flex items-center justify-between gap-2">
                                     <p className="text-left text-lg font-medium">Nombre: </p>
-                                    <small className="text-[15px]">{user.nombre || "No disponible"}</small>
+                                    <small className="text-[15px]">{user.nombre|| "No disponible"} {user.apellido}</small>
+                                    
                                 </li>
                                 <li className="flex items-center justify-between gap-2">
                                     <p className="text-left text-lg font-medium">Fecha de reservación: </p>

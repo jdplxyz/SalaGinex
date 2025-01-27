@@ -295,20 +295,23 @@ export const BillMovie = () => {
               <h2 className="text-2xl md:text-3xl font-bold mb-4">Combos de Comida</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
-                  { id: 1, nombre: "Combo 1", precio: 2 },
-                  { id: 2, nombre: "Combo 2", precio: 3 },
-                  { id: 3, nombre: "Combo 3", precio: 4 },
+                  { id: 1, nombre: "Combo 1", precio: 2.5,description: '1 cotufa, 1 refresco' },
+                  { id: 2, nombre: "Combo 2", precio: 4,description: '2 cotufas, 2 refrescos'},
                 ].map((combo) => (
                   <div
                     key={combo.id}
-                    className={`p-4 border rounded cursor-pointer ${
+                    className={`p-4 border rounded cursor-pointer flex items-center ${
                       selectedCombos.some((c) => c.id === combo.id) ? "bg-blue-100" : ""
                     }`}
                     onClick={() => handleComboSelection(combo)}
                   >
-                    <h3 className="text-lg font-bold">{combo.nombre}</h3>
-                    <p className="text-sm">Precio Bs: {(combo.precio * currencyRate).toFixed(2)}</p>
-                    <p className="text-sm">Precio $: {(combo.precio).toFixed(2)}</p>
+                    <div className="w-full flex flex-col">
+                    <h3 className="text-xl font-bold lg:text-[28px] mb-3">{combo.nombre}</h3>
+                    <p className="text-lg lg:text-2xl">{combo.description}</p>
+                    <p className="text-lg lg:text-2xl">Precio Bs: {(combo.precio * currencyRate).toFixed(2)}</p>
+                    <p className="text-lg lg:text-2xl">Precio $: {(combo.precio).toFixed(2)}</p>
+                    </div>
+                    <img src="../public/popcorn.png" alt="Porpcorn"  className="w-[110px] h-[110px]"/>
                   </div>
                 ))}
               </div>
@@ -353,7 +356,7 @@ export const BillMovie = () => {
                   <h2 className="text-lg font-bold">Total:</h2>
                   <div className="flex flex-col items-end">
                     <p className="text-lg">Bs {calculateTotal().toFixed(2)}</p>
-                    <p className="text-lg">$ {calculateTotal().toFixed(2) / currencyRate}</p>
+                    <p className="text-lg">$ {(calculateTotal() / currencyRate).toFixed(2)}</p>
                   </div>
                 </div>
               </div>
@@ -362,12 +365,7 @@ export const BillMovie = () => {
                   La hora de transmisión ya pasó. No puedes reservar esta película.
                 </p>
               ) : (
-                <button
-                  className="px-6 py-2 bg-green-500 text-lg font-medium text-white rounded hover:bg-green-600 mt-4"
-                  onClick={() => confirmReservation(movie)}
-                >
-                  Confirmar
-                </button>
+                null
               )}
             </section>
           )}
@@ -467,7 +465,7 @@ export const BillMovie = () => {
                               >
                                 <g
                                   fill="none"
-                                  stroke={isSelected ? "#ffffff" : "#000000"}
+                                  stroke={"#000000"}
                                   strokeLinecap="round"
                                   strokeLinejoin="round"
                                   strokeWidth="2"
@@ -511,8 +509,10 @@ export const BillMovie = () => {
                     Película: <small className="font-medium">{movie.titulo}</small>
                   </p>
                   <p>Asientos: {selectedSeats.join(", ")}</p>
+                  <p>Precio por ticket: 2$ </p>
                   <p>Combos: {selectedCombos.map((c) => `${c.nombre} (BS ${(c.precio * currencyRate).toFixed(2)})`).join(", ")}</p>
-                  <p>Total: ${calculateTotal().toFixed(2)}</p>
+                  <p>Total: BS {calculateTotal().toFixed(2)}</p>
+                  <p>Total: $ {(calculateTotal() / currencyRate).toFixed(2)}</p>
                 </div>
                 <div className="mt-4 flex justify-end">
                   <button

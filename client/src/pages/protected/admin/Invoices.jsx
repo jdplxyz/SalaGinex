@@ -215,10 +215,13 @@ export const Invoices = () => {
         doc.setFont("helvetica", "normal");
         doc.setFontSize(10);
 
+       
         doc.setFontSize(20);
         doc.text("Factura", 36, 15);
 
+
         doc.setFontSize(10);
+        doc.text("Sala Ginex",10,20)
         doc.text(`Ticket: ${selectedOrder.id_reservacion}`, 10, 30);
         doc.text(`Fecha: ${formatDate(selectedOrder.fecha_reserva)}`, 10, 38);
 
@@ -248,8 +251,8 @@ export const Invoices = () => {
             });
         }
 
-        doc.text(`Total: ${selectedOrder.total} $`, 10, 90);
-        doc.text(`Total BS: ${selectedOrder.total * 60} BS`, 10, 100);
+        doc.text(`Total Bs: ${selectedOrder.total} Bs`, 10, 90);
+        doc.text(`Total $: ${selectedOrder.total / currencyRate} $`, 10, 100);
 
         doc.save(`factura_${selectedOrder.id_reservacion}.pdf`);
     };
@@ -359,13 +362,13 @@ export const Invoices = () => {
             {/* Modal de factura */}
             {invoiceModal && selectedOrder && (
                 <section className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center w-full">
-                    <div className="bg-white p-5 rounded-lg w-[90%] max-w-md">
+                    <div className="bg-white p-5 rounded-lg w-[90%] max-w-lg">
                         <header className="w-full flex flex-col items-center gap-2 pb-6 border-b-2">
                             <h2 className="text-2xl font-bold">Factura</h2>
                             <div className="w-full flex justify-between mt-5">
                                 <div>
-                                    <p className="text-lg font-medium">Ticket: {selectedOrder.id_reservacion}</p>
-                                    <p><strong>Fecha:</strong> {formatDate(selectedOrder.fecha_reserva)}</p>
+                                    <p className="text-xl font-medium">Ticket: {selectedOrder.id_reservacion}</p>
+                                    <p className="text-md"><strong>Fecha:</strong> {formatDate(selectedOrder.fecha_reserva)}</p>
                                 </div>
                                 <QRCode
                                     value={selectedOrder.codigo || "No disponible"}
@@ -378,15 +381,15 @@ export const Invoices = () => {
                         </header>
                         <main className="w-full mt-5">
                             <header className="w-full flex justify-between">
-                                <p className="text-lg font-medium">Cliente: </p>
-                                <p className="text-md font-medium">
+                                <p className="text-xl font-medium">Cliente: </p>
+                                <p className="text-lg font-medium">
                                     {selectedUser ? `${selectedUser.nombre} ${selectedUser.apellido}` : "Usuario desconocido"}
                                 </p>
                             </header>
 
                             {selectedOrder.combos && (
                                 <div className="w-full flex justify-between">
-                                    <p className="text-md font-medium">Combos:</p>
+                                    <p className="text-lg font-medium">Combos:</p>
                                     <div className="flex gap-2">
                                         {JSON.parse(selectedOrder.combos).map((combo, index) => (
                                             <p key={index}>{combo.nombre}</p>
@@ -397,7 +400,7 @@ export const Invoices = () => {
 
                             {selectedOrder.asientos && (
                                 <div className="w-full flex justify-between">
-                                    <p className="text-md font-medium">Asientos:</p>
+                                    <p className="text-lg font-medium">Asientos:</p>
                                     <div className="flex gap-2">
                                         {JSON.parse(selectedOrder.asientos).map((asiento, index) => (
                                             <p key={index}>{asiento}</p>
@@ -407,12 +410,12 @@ export const Invoices = () => {
                             )}
 
                             <div className="w-full flex justify-between">
-                                <p className="text-md font-medium">Total: </p>
-                                <p>{selectedOrder.total} $</p>
+                                <p className="text-lg font-medium">Total: </p>
+                                <p>{selectedOrder.total} Bs</p>
                             </div>
                             <div className="w-full flex justify-between">
-                                <p className="text-md font-medium">Total BS: </p>
-                                <p>{selectedOrder.total * 60} BS</p>
+                                <p className="text-lg font-medium">Total $: </p>
+                                <p>{selectedOrder.total / currencyRate} $</p>
                             </div>
                             <div className="w-full flex justify-center gap-4">
                                 <button

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { CurrencyContext } from "../../../contexts/CurrencyContext";
 import { API_URL } from "../../../utils/ApiUrl";
 import useWindowsDimension from "../../../hooks/useWindowsDimensions";
+import { formatDate } from "../../../utils/FormatDate";
 
 export const Dashboard = () => {
   const [userData, setUserData] = useState([]);
@@ -42,24 +43,6 @@ export const Dashboard = () => {
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) {
-      return "Fecha inválida";
-    }
-
-    const date = new Date(dateString);
-
-    if (isNaN(date.getTime())) {
-      return "Fecha inválida";
-    }
-
-    const day = date.getUTCDate().toString().padStart(2, "0");
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-    const year = date.getUTCFullYear();
-
-    return `${day}/${month}/${year}`;
   };
 
   const ordersToday = (orders) => {
@@ -184,8 +167,8 @@ export const Dashboard = () => {
                               </p>
                             </div>
                             <div className="flex items-center gap-2 text-gray-600">
-                              <p>Tickets:</p>
-                              <p className="font-medium">
+                              <p className="sm:text-xl">Tickets:</p>
+                              <p className="font-medium sm:text-xl">
                                 {order.asientos
                                   ? JSON.parse(order.asientos).length
                                   : 0}

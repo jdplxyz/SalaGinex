@@ -175,3 +175,21 @@ export const getMoviesWithReservations = async (req, res) => {
     });
   }
 };
+
+// Función para eliminar películas expiradas
+export const eliminarPeliculasExpiradas = async () => {
+  let pool;
+  try {
+      pool = await connectDatabase();
+      const request = pool.request(); 
+      await request.execute('EliminarPeliculasExpiradas'); 
+      console.log('Procedimiento almacenado ejecutado correctamente.');
+  } catch (error) {
+      console.error('Error:', error);
+      throw error; 
+  } finally {
+      if (pool) {
+          await pool.close(); 
+      }
+  }
+};

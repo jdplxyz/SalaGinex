@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { getNextWeekendDates } from "../../../utils/GetDateMovies";
 import { API_URL } from "../../../utils/ApiUrl";
 
+
 export const Movies = () => {
   const [dataMovie, setDataMovie] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -244,6 +245,10 @@ export const Movies = () => {
                 <div className="w-[100%] flex justify-between items-center gap-2 py-3 px-1">
                   <h2 className="text-2xl font-medium">{movie.titulo}</h2>
                   <p className="text-lg text-gray-500">{movie.genero}</p>
+                </div>
+                <div className="w-[100%] flex justify-between items-center gap-2 py-3 px-1">
+                  <p className="text-xl font-medium">{selectedDate}</p>
+                  <p className="text-lg text-gray-500">{movie.hora_transmision}</p>
                 </div>
                 <p className="p-2 w-full text-md text-gray-600 font-medium">{movie.sinopsis}</p>
                 <div className="w-full flex gap-2 p-2">
