@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addReservation, getSeatReservated, getOrderReservated,updateOrdenReservated,getOrdenConfirmated } from "../controllers/reservacionController.js";
+import { addReservation, getSeatReservated, getOrderReservated,updateOrdenReservated,getOrdenConfirmated,getHistorialToExport } from "../controllers/reservacionController.js";
 const router = Router();
 
 
