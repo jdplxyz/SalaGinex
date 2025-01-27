@@ -312,7 +312,7 @@ export const sendMail = async (req, res) => {
         "UPDATE Administrador.Usuario SET reset_token = @reset_token WHERE id_usuario = @id_usuario"
       );
 
-    const resetUrl = `https://salaginex.netlify.app/reset/${resetToken}`;
+    const resetUrl = `https://sala-ginex.vercel.app/reset/${resetToken}`;
 
     sendSmtpEmail.subject = "Hola, correo para restablecer clave";
     sendSmtpEmail.to = [{ email: correo_electronico }];
