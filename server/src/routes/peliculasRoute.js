@@ -3,7 +3,7 @@ import { getMovies, updateMovie,getMovieById, deleteMovie,getMoviesWithReservati
 import { verifyToken } from "../controllers/usuarioController.js";
 const router = Router();
 
-router.get("/peliculas", verifyToken,getMovies);
+router.get("/peliculas",getMovies);
 router.get("/pelicula/:id",verifyToken,getMovieById);
 router.put("/peliculas/:id", verifyToken,updateMovie);
 router.delete('/pelicula/:id',verifyToken,deleteMovie)
