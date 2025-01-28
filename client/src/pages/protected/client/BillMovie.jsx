@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { QRCode } from "react-qr-code";
 import { CurrencyContext } from "../../../contexts/CurrencyContext";
 import { API_URL } from "../../../utils/ApiUrl";
-import PopCorn from '/public/popcorn.png'
+import PopCorn from '/public/popcorn.png';
 
 export const BillMovie = () => {
   const { id } = useParams();
@@ -25,7 +25,6 @@ export const BillMovie = () => {
   const pricePerCombo = 4;
   const navigate = useNavigate();
 
-  
   const { currencyRate, getRateCurrency } = useContext(CurrencyContext);
 
   useEffect(() => {
@@ -33,9 +32,8 @@ export const BillMovie = () => {
   }, []);
 
   const getMovie = async () => {
-    
-    const response = await fetch(`${API_URL}/pelicula/${id}`,{
-      method:'GET',
+    const response = await fetch(`${API_URL}/pelicula/${id}`, {
+      method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
       },
@@ -50,13 +48,12 @@ export const BillMovie = () => {
 
   const getSeatReservated = async () => {
     try {
-      const response = await fetch(`${API_URL}/asientos/${id}`,{
-        method:'GET',
+      const response = await fetch(`${API_URL}/asientos/${id}`, {
+        method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
         }
-      }
-      );
+      });
       if (!response.ok) {
         console.error("Error:", response.statusText);
         return;
@@ -95,23 +92,33 @@ export const BillMovie = () => {
     return `${hours}:${formattedMinutes} ${modifier}`;
   };
 
-  const isTimePassed = (time) => {
-    const now = new Date();
-    const [timePart, modifier] = time.split(" ");
+  const isTimePassed = (dateString, time) => {
+    if (!dateString || !time) {
+      console.error("Fecha u hora de transmisión no proporcionada.");
+      return true; // O false, dependiendo de tu lógica
+    }
+
+    const now = new Date(); // Fecha y hora actuales
+
+    // Convertir la fecha y hora de transmisión de la película a un objeto Date
+    const [year, month, day] = dateString.split("-").map(Number); // Formato: "YYYY-MM-DD"
+    const [timePart, modifier] = time.split(" "); // Formato: "HH:MM AM/PM"
     let [hours, minutes] = timePart.split(":").map(Number);
 
-    // Convertir a formato de 24 horas
+    // Convertir la hora a formato de 24 horas
     if (modifier === "PM" && hours !== 12) {
       hours += 12;
     } else if (modifier === "AM" && hours === 12) {
       hours = 0;
     }
 
-    const movieTime = new Date();
-    movieTime.setHours(hours, minutes, 0, 0); // Establecer la hora de la película
+    // Crear un objeto Date con la fecha y hora de transmisión
+    const movieDateTime = new Date(year, month - 1, day, hours, minutes, 0, 0);
 
-    return now > movieTime; // Comparar con la hora actual
+    // Comparar la fecha y hora actual con la de la película
+    return now > movieDateTime;
   };
+
 
   const handleNextStep = () => {
     if (currentStep < 3) {
@@ -194,7 +201,6 @@ export const BillMovie = () => {
       precio_total: totalPrice,
       codigo: uniqueCode,
     };
-
 
     const response = await fetch(`${API_URL}/reservacion`, {
       method: "POST",
@@ -309,23 +315,22 @@ export const BillMovie = () => {
               <h2 className="text-2xl md:text-3xl font-bold mb-4">Combos de Comida</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {[
-                  { id: 1, nombre: "Combo 1", precio: 2.5,description: '1 cotufa, 1 refresco' },
-                  { id: 2, nombre: "Combo 2", precio: 4,description: '2 cotufas, 2 refrescos'},
+                  { id: 1, nombre: "Combo 1", precio: 2.5, description: '1 cotufa, 1 refresco' },
+                  { id: 2, nombre: "Combo 2", precio: 4, description: '2 cotufas, 2 refrescos' },
                 ].map((combo) => (
                   <div
                     key={combo.id}
-                    className={`p-4 border rounded cursor-pointer flex items-center ${
-                      selectedCombos.some((c) => c.id === combo.id) ? "bg-blue-100" : ""
-                    }`}
+                    className={`p-4 border rounded cursor-pointer flex items-center ${selectedCombos.some((c) => c.id === combo.id) ? "bg-blue-100" : ""
+                      }`}
                     onClick={() => handleComboSelection(combo)}
                   >
                     <div className="w-full flex flex-col">
-                    <h3 className="text-xl font-bold lg:text-[28px] mb-3">{combo.nombre}</h3>
-                    <p className="text-lg lg:text-2xl">{combo.description}</p>
-                    <p className="text-lg lg:text-2xl">Precio Bs: {(combo.precio * currencyRate).toFixed(2)}</p>
-                    <p className="text-lg lg:text-2xl">Precio $: {(combo.precio).toFixed(2)}</p>
+                      <h3 className="text-xl font-bold lg:text-[28px] mb-3">{combo.nombre}</h3>
+                      <p className="text-lg lg:text-2xl">{combo.description}</p>
+                      <p className="text-lg lg:text-2xl">Precio Bs: {(combo.precio * currencyRate).toFixed(2)}</p>
+                      <p className="text-lg lg:text-2xl">Precio $: {(combo.precio).toFixed(2)}</p>
                     </div>
-                    <img src={PopCorn} alt="Porpcorn"  className="w-[120px] h-[12s0px]"/>
+                    <img src={PopCorn} alt="Porpcorn" className="w-[120px] h-[12s0px]" />
                   </div>
                 ))}
               </div>
@@ -374,7 +379,7 @@ export const BillMovie = () => {
                   </div>
                 </div>
               </div>
-              {isTimePassed(movie.hora_transmision) ? (
+              {isTimePassed(movie.fecha_transmision, movie.hora_transmision) ? (
                 <p className="text-red-500 text-lg font-bold mt-4">
                   La hora de transmisión ya pasó. No puedes reservar esta película.
                 </p>
@@ -395,31 +400,29 @@ export const BillMovie = () => {
             )}
             {currentStep < 3 ? (
               <button
-                className={`px-6 py-2 text-lg font-medium text-white rounded ${
-                  isTimePassed(movie.hora_transmision)
+                className={`px-6 py-2 text-lg font-medium text-white rounded ${isTimePassed(movie.fecha_transmision,movie.hora_transmision)
                     ? "bg-gray-500 cursor-not-allowed"
                     : "bg-blue-500 hover:bg-blue-600"
-                }`}
+                  }`}
                 onClick={handleNextStep}
-                disabled={isTimePassed(movie.hora_transmision)}
+                disabled={isTimePassed(movie.fecha_transmision,movie.hora_transmision)}
               >
                 Siguiente
               </button>
             ) : (
               <button
-                className={`px-6 py-2 text-lg font-medium text-white rounded ${
-                  isTimePassed(movie.hora_transmision)
+                className={`px-6 py-2 text-lg font-medium text-white rounded ${isTimePassed(movie.hora_transmision)
                     ? "bg-gray-500 cursor-not-allowed"
                     : "bg-green-500 hover:bg-green-600"
-                }`}
+                  }`}
                 onClick={() => {
-                  if (!isTimePassed(movie.hora_transmision)) {
+                  if (!isTimePassed(movie.fecha_transmision,movie.hora_transmision)) {
                     confirmReservation(movie);
                   }
                 }}
-                disabled={isTimePassed(movie.hora_transmision)}
+                disabled={isTimePassed(movie.fecha_transmision,movie.hora_transmision)}
               >
-                {isTimePassed(movie.hora_transmision)
+                {isTimePassed(movie.fecha_transmision,movie.hora_transmision)
                   ? "La hora de transmisión ya pasó"
                   : "Confirmar"}
               </button>
@@ -457,9 +460,8 @@ export const BillMovie = () => {
                           return (
                             <div
                               key={colIndex}
-                              className={`w-[95%] ml-6 py-2 flex flex-col items-center transition duration-500 ease-in-out ${
-                                isSelected ? "bg-blue-200" : isReserved ? "bg-red-200" : "bg-gray-100"
-                              }`}
+                              className={`w-[95%] ml-6 py-2 flex flex-col items-center transition duration-500 ease-in-out ${isSelected ? "bg-blue-200" : isReserved ? "bg-red-200" : "bg-gray-100"
+                                }`}
                               onClick={() => {
                                 if (!isReserved) {
                                   handleSeatSelection(letter, seat);
