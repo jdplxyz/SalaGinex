@@ -27,6 +27,7 @@ export const Register = () => {
     const timer = setTimeout(()=>{
       setMessage("")
       setIsModalOpen(false)
+      navigate('/');
     },2000)
     return ()=> clearTimeout(timer)
   },[message])
@@ -56,10 +57,10 @@ export const Register = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setIsModalOpen(true)
         setMessage('Usuario registrado');
+        setIsModalOpen(true)
+       
 
-        navigate('/inicio');
       } else {
         setMessage(data.message || "Usuario ya registrado.");
       }

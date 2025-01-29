@@ -424,3 +424,26 @@ export const sendMailToVerify = async (correo_electronico) =>{
   }
  
 }
+
+export const verifyUser = async (req,res) =>{
+  const {token} = req.body
+  if(!token){
+    return res.status(404).json({message:'No existe el token'})
+  }
+  try{
+    const pool = await connectDatabase()
+    const result = await pool
+    .request()
+    .input('token',sql.VarChar,token)
+    .query('UPDATE Administrador.Usuario SET verificada = 1,  verify_token = NULL  WHERE verify_token = @token')
+
+    if(result.rowsAffected[0] > 0){
+      return res.json({message:'Usuario verificado con exito!'})
+    }
+    return res.json({message:'Error al verificar el usuario!'})
+  }catch(error){  
+    console.error(error)
+  }
+
+
+}

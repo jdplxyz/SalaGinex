@@ -10,6 +10,7 @@ import {
   getUsersWithReservations,
   sendMail,
   resetPassword,
+  verifyUser
 } from "../controllers/usuarioController.js";
 
 const router = Router();
@@ -31,4 +32,5 @@ router.put("/users/:id", verifyToken,updateUserById);
 router.get("/users/reservacion", verifyToken,getUsersWithReservations);
 router.post("/recuperar",sendMail);
 router.put("/reset", resetPassword);
+router.put("/verify",verifyUser)
 export default router;

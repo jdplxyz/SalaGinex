@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-
+import { API_URL } from "../utils/ApiUrl"
 export const Verify = () =>{
     const {token} = useParams()
     const navigate = useNavigate()
@@ -12,14 +12,41 @@ export const Verify = () =>{
         navigate('/')
     }   
 
-    const handleSubmit = () =>{
-        console.log('Hola')
+    useEffect(()=>{
+        const timer = setTimeout(()=>{
+            setOpenModal(false)
+            setMessage('')
+        },2000)
+        return ()=> clearTimeout(timer)
+    },[openModal])
+
+
+    const handleVerify = async() =>{
+        try{
+            const response = await fetch(`${API_URL}/verify`,{
+                method:'PUT',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({token:token})
+            })
+
+            if(!response.ok){
+                setMessage('Error al verificar el usuario')
+            }
+
+            setMessage('Usuario verificado correctamente.')
+            openModal(true)
+
+        }catch(error){  
+            console.error(error)
+        }
     }
 
     return (
 
         <section className="w-full flex flex-col items-center justify-center gap-3 mx-auto">
-        <form onSubmit={handleSubmit} className="w-[100%] h-auto bg-white flex flex-col gap-5 p-5 sm:w-[60%] xl:w-[30%] sm:shadow-lg sm:rounded-lg sm:mt-5 sm:py-5 sm:mt-[25px]">
+        <div className="w-[100%] h-auto bg-white flex flex-col gap-5 p-5 sm:w-[60%] xl:w-[30%] sm:shadow-lg sm:rounded-lg sm:mt-5 sm:py-5 sm:mt-[25px]">
             <header className="w-full flex flex-col items-center">
             <a href="/inicio">
       <img
@@ -31,15 +58,14 @@ export const Verify = () =>{
                 <p className="text-xl font-bold mt-5">Verificar Cuenta</p>
             </header>
             <section className="w-full flex flex-col items-center sm:w-[100%] sm:mx-auto sm:flex sm:flex-col sm:items-center">
-                <h2 className="text-gray-500 text-xl">Haz click en el boton para verificar la cuenta.</h2>
+                <h2 className="text-gray-500 text-xl text-center">Haz click en el boton para verificar la cuenta.</h2>
             </section>
-            <button className="text-white text-[20px] font-medium bg-[#010739] p-3 w-[50%] mx-auto rounded-md">Verificar cuenta</button>
-        </form>
+            <button onClick={handleVerify} className="text-white text-[20px] font-medium bg-[#010739] p-3 w-[50%] mx-auto rounded-md">Verificar cuenta</button>
+        </div>
         {openModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center w-full">
                 <div className="bg-white p-5 rounded-lg w-[90%] max-w-md">
                     {message && <p className="text-center text-2xl">{message}</p>}
-                    {error && <p className="text-center text-2xl text-red-500">{error}</p>}
                 </div>
             </div>
         )}
