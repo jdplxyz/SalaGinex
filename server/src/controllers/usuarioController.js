@@ -399,13 +399,9 @@ export const sendMailToVerify = async (correo_electronico) =>{
   try{ 
     const verifyToken = crypto.randomBytes(20).toString("hex");
     const pool = await connectDatabase()
-  
-
     const verifyUrl = `https://sala-ginex.vercel.app/verificar/${verifyToken}`;
 
-    
-
-    const result = await pool()
+    const result = await pool
     .request()
     .input('correo_electronico',sql.VarChar,correo_electronico)
     .input('token',sql.VarChar,verifyToken)
