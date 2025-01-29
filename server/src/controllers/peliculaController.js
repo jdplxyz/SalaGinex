@@ -177,7 +177,7 @@ export const getMoviesWithReservations = async (req, res) => {
 };
 
 // Función para eliminar películas expiradas
-export const eliminarPeliculasExpiradas = async () => {
+export const deleteExpiredMovies = async () => {
   let pool;
   try {
       pool = await connectDatabase();

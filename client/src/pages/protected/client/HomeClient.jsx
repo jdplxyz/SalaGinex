@@ -49,7 +49,7 @@ export const HomeClient = () => {
     }
   }, [selectedDate, dataMovie]);
 
-  // Función para verificar si la película ya comenzó
+  
   const isMovieStarted = (movieTime) => {
     const now = new Date(); // Hora actual
     const movieDateTime = new Date(`${selectedDate}T${movieTime}`); // Combina fecha y hora de la película

@@ -35,6 +35,9 @@ export const Login = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(400).json({ message: "Contraseña incorrecta" });
     }
+    if(user.verificada != 1){
+      return res.status(404).json({message: "Verifica su cuenta, revise el correo."})
+    }
 
     const token = jwt.sign(
       {
@@ -216,7 +219,7 @@ const verifyExistUser = async (correo_electronico) => {
 };
 
 export const verifyToken = (req, res, next) => {
-  // Obtener el encabezado Authorization
+
   const authHeader = req.headers['authorization'];
 
   // Verificar si el encabezado existe y tiene el formato correcto
@@ -342,7 +345,6 @@ export const sendMail = async (req, res) => {
 export const resetPassword = async (req, res) => {
   const { password, token } = req.body;
 
-  // Validar que se proporcionen la contraseña y el token
   if (!password || !token) {
     return res
       .status(400)
@@ -390,3 +392,15 @@ export const resetPassword = async (req, res) => {
     return res.status(500).json({ error: "Error interno del servidor." });
   }
 };
+
+
+export const sendMailToVerify = async (req,res) =>{
+  try{ 
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    const pool = await connectDatabase()
+    const response = await pool()
+  }catch(error){
+    return res.json({error:'Error'})
+  }
+ 
+}
