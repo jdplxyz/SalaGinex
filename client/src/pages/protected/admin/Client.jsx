@@ -32,15 +32,29 @@ export const ClientAdmin = () => {
   }, [errorMessage, message]);
 
   useEffect(() => {
-    fetch(`${API_URL}/users`)
-      .then((response) => response.json())
-      .then((clients) => {
-        setData(clients.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-      });
+  getUsers()
   }, []);
+
+  const getUsers =  async () =>{
+    try{
+      const response = await fetch(`${API_URL}/users`,{
+        method:'GET',
+        headers:{
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`,
+        }
+      })
+  
+      const data = await response.json()
+      if(response.ok){
+        setData(data.data)
+      }
+    }catch(error){
+      console.error(error)
+    }
+    
+
+  }
 
   // Calcular los clientes que se deben mostrar en la página actual
   const indexOfLastClient = currentPage * clientsPerPage;
