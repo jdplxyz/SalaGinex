@@ -144,7 +144,12 @@ export const Invoices = () => {
     
     const handleExport = async () => {
         try {
-            const response = await fetch(`${API_URL}/export`);
+            const response = await fetch(`${API_URL}/export`,{
+                method:'GET',
+                headers:{
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
             const data = await response.json();
             console.log("Respuesta de la API:", data); // Depuración
     
