@@ -100,7 +100,7 @@ export const Register = async (req, res) => {
         "INSERT INTO Administrador.Usuario(nombre, apellido, correo_electronico, clave, rol) VALUES (@nombre, @apellido, @correo_electronico, @clave, @rol)"
       );
 
-    sendMailToVerify(correo_electronico)
+    await sendMailToVerify(correo_electronico)
     res.status(201).json({ message: "Usuario registrado exitosamente" });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -405,7 +405,7 @@ export const sendMailToVerify = async (correo_electronico) =>{
     .request()
     .input('correo_electronico',sql.VarChar,correo_electronico)
     .input('token',sql.VarChar,verifyToken)
-    .query('UPDATE Administrador.USUARIO SET verify_token = @token WHERE correo_electronico @correo_electronico')
+    .query('UPDATE Administrador.USUARIO SET verify_token = @token WHERE correo_electronico = @correo_electronico')
 
     if(result.rowsAffected[0] > 0){
       sendSmtpEmail.subject = "Hola, correo para verificar tu cuenta.";
