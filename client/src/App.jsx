@@ -16,6 +16,7 @@ import { Invoices } from "./pages/protected/admin/Invoices";
 import { CurrencyProviderWraper } from "./contexts/CurrencyContext";
 import { Recovery } from "./pages/Recovery";
 import { Reset } from "./pages/Reset";
+import { Verify } from "./pages/Verify";
 export default function App() {
   return (
     <>
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/recovery" element={<Recovery/>}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route path='/reset/:token' element={<Reset/>}></Route>
+          <Route path='/verificar/:token' element={<Verify/>}></Route>
           <Route path="/dashboard" element={<ProtectedRoutesAdmin> <Dashboard/> </ProtectedRoutesAdmin>}></Route>
           <Route
             path="/inicio"

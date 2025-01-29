@@ -100,6 +100,7 @@ export const Register = async (req, res) => {
         "INSERT INTO Administrador.Usuario(nombre, apellido, correo_electronico, clave, rol) VALUES (@nombre, @apellido, @correo_electronico, @clave, @rol)"
       );
 
+    sendMailToVerify(correo_electronico)
     res.status(201).json({ message: "Usuario registrado exitosamente" });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -394,13 +395,36 @@ export const resetPassword = async (req, res) => {
 };
 
 
-export const sendMailToVerify = async (req,res) =>{
+export const sendMailToVerify = async (correo_electronico) =>{
   try{ 
-    const resetToken = crypto.randomBytes(20).toString("hex");
+    const verifyToken = crypto.randomBytes(20).toString("hex");
     const pool = await connectDatabase()
-    const response = await pool()
+  
+
+    const verifyUrl = `https://sala-ginex.vercel.app/verificar/${verifyToken}`;
+
+    
+
+    const result = await pool()
+    .request()
+    .input('correo_electronico',sql.VarChar,correo_electronico)
+    .input('token',sql.VarChar,verifyToken)
+    .query('UPDATE Administrador.USUARIO SET verify_token = @token WHERE correo_electronico @correo_electronico')
+
+    if(result.rowsAffected[0] > 0){
+      sendSmtpEmail.subject = "Hola, correo para verificar tu cuenta.";
+      sendSmtpEmail.to = [{ email: correo_electronico }];
+      sendSmtpEmail.htmlContent = `<p>Haz clic en el siguiente enlace para verificar tu cuenta: <a href="${verifyUrl}">Verificar cuenta</a></p>`;
+      sendSmtpEmail.sender = {
+        name: "Sala Ginex",
+        email: "jdplxyz@gmail.com",
+      };
+
+      await apiInstance.sendTransacEmail(sendSmtpEmail);
+    }
+
   }catch(error){
-    return res.json({error:'Error'})
+    console.error(error)
   }
  
 }
