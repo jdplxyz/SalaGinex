@@ -16,6 +16,7 @@ export const Verify = () =>{
         const timer = setTimeout(()=>{
             setOpenModal(false)
             setMessage('')
+            navigate('/')
         },2000)
         return ()=> clearTimeout(timer)
     },[openModal])
