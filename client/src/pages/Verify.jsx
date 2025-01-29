@@ -21,27 +21,38 @@ export const Verify = () =>{
     },[openModal])
 
 
-    const handleVerify = async() =>{
-        try{
-            const response = await fetch(`${API_URL}/verify`,{
-                method:'PUT',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify({token:token})
-            })
-
-            if(!response.ok){
-                setMessage('Error al verificar el usuario')
+    const handleVerify = async () => {
+        try {
+          const response = await fetch(`${API_URL}/verify`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token: token }),
+            credentials: 'include', // If using cookies
+          });
+      
+          if (!response.ok) {
+            let errorMessage = 'Error al verificar el usuario.';
+            if (response.status === 400) {
+              errorMessage = 'Invalid or expired token.';
+            } else if (response.status === 500) {
+              errorMessage = 'Internal server error.';
             }
-
-            setMessage('Usuario verificado correctamente.')
-            openModal(true)
-
-        }catch(error){  
-            console.error(error)
+            setError(errorMessage); 
+            return; 
+          }
+      
+          const data = await response.json(); 
+          setMessage(data.message || 'Usuario verificado correctamente.'); 
+          setOpenModal(true);
+      
+        } catch (error) {
+          console.error(error);
+          setError('An unexpected error occurred.'); 
         }
-    }
+      };
+
 
     return (
 
