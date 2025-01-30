@@ -224,7 +224,7 @@ export const verifyToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
 
   // Verificar si el encabezado existe y tiene el formato correcto
-  const token = authHeader && authHeader.split(' ')[1]; // Separar "Bearer" del token
+  const token = authHeader && authHeader.split(' ')[1]; 
   if (!token) {
     return res.status(401).json({ message: "Acceso no autorizado: Token no proporcionado" });
   }
