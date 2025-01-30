@@ -4,22 +4,11 @@ import {createContext, useState } from "react";
 
 function CurrencyProviderWraper(props){
     
-    const [currencyRate,setCurrencyRate] = useState(null)
-
-
-    const getRateCurrency = async (value,currency) =>{
-        try{
-            const response = await fetch(`https://pydolarve.org/api/v1/dollar/conversion?type=${currency}&value=${value}&page=alcambio&monitor=enparalelovzla`)
-            const data = await response.json()
-            setCurrencyRate(data)
-        }catch(error){
-            console.error(error)
-        }
-    }
+    const [currencyRate,setCurrencyRate] = useState(60)
  
 
     return (
-        <CurrencyContext.Provider value={{currencyRate,getRateCurrency}}>
+        <CurrencyContext.Provider value={{currencyRate}}>
             {props.children}
         </CurrencyContext.Provider>
     )
