@@ -11,7 +11,7 @@ function CurrencyProviderWraper(props){
         try{
             const response = await fetch(`https://pydolarve.org/api/v1/dollar/conversion?type=${currency}&value=${value}&page=alcambio&monitor=enparalelovzla`)
             const data = await response.json()
-            setCurrencyRate(data)
+            setCurrencyRate(data || 60)
         }catch(error){
             console.error(error)
         }
