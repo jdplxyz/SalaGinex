@@ -12,7 +12,7 @@ export const Dashboard = () => {
   const [moneyIncome, setMoneyIncome] = useState(0);
   const [currencySwitch, setCurrencySwitch] = useState(false);
   const token = localStorage.getItem('auth_token');
-  const { currencyRate, getRateCurrency } = useContext(CurrencyContext);
+  const { currencyRate } = useContext(CurrencyContext);
   const { width } = useWindowsDimension();
 
   const getUserData = useCallback(async () => {
@@ -57,9 +57,6 @@ export const Dashboard = () => {
     );
   }, []);
 
-  useEffect(() => {
-    getRateCurrency(1, "USD");
-  }, [getRateCurrency]);
 
   useEffect(() => {
     getUserData();

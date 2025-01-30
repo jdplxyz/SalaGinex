@@ -276,7 +276,7 @@ export const Invoices = () => {
         getOrdenConfirmated();
         getUsersWithReservations();
         getMoviesWithReservations();
-        getRateCurrency(1, 'USD');
+       
     }, []);
 
     useEffect(() => {
