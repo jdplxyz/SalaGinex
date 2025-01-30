@@ -33,4 +33,6 @@ router.get("/users/reservacion", verifyToken,getUsersWithReservations);
 router.post("/recuperar",sendMail);
 router.put("/reset", resetPassword);
 router.put("/verify",verifyUser)
+
+
 export default router;

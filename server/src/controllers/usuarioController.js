@@ -322,7 +322,7 @@ export const sendMail = async (req, res) => {
         "UPDATE Administrador.Usuario SET reset_token = @reset_token WHERE id_usuario = @id_usuario"
       );
 
-    const resetUrl = `https://sala-ginex.vercel.app/reset/${resetToken}`;
+    const resetUrl = `https://ginex-sala.vercel.app/reset/${resetToken}`;
 
     sendSmtpEmail.subject = "Hola, correo para restablecer clave";
     sendSmtpEmail.to = [{ email: correo_electronico }];
@@ -399,7 +399,7 @@ export const sendMailToVerify = async (correo_electronico) =>{
   try{ 
     const verifyToken = crypto.randomBytes(20).toString("hex");
     const pool = await connectDatabase()
-    const verifyUrl = `https://sala-ginex.vercel.app/verificar/${verifyToken}`;
+    const verifyUrl = `https://ginex-sala.vercel.app/verificar/${verifyToken}`;
 
     const result = await pool
     .request()
