@@ -64,7 +64,8 @@ export const Register = () => {
        }, 3000);
 
       } else {
-        setMessage(data.message || "Usuario ya registrado.");
+        setMessage(data.message[0].message || "Usuario ya registrado.");
+        console.log(data.message)
         setIsModalOpen(true)
       }
     } catch (error) {
@@ -105,6 +106,7 @@ export const Register = () => {
               name="name"
               placeholder="Ingresa tu nombre"
               onChange={(e)=> setNombre(e.target.value)}
+              required
             />
           </div>
           <div className="flex flex-col w-full p-2">
@@ -121,6 +123,7 @@ export const Register = () => {
               name="lastname"
               placeholder="Ingresa tu apellido"
               onChange={(e)=> setApellido(e.target.value)}
+              required
             />
           </div>
 
@@ -138,6 +141,7 @@ export const Register = () => {
               name="email"
               placeholder="Ingresa tu correo"
               onChange={(e)=> setCorreoElectronico(e.target.value)}
+              required
             />
           </div>
           <div className="flex flex-col w-full p-2">
@@ -157,6 +161,7 @@ export const Register = () => {
                 placeholder="Ingresa tu contraseña"
                 value={clave}
                 onChange={(e) => setClave(e.target.value)}
+                required
               />
               <a onClick={() => setIsVisible(!isVisible)}>
               {isVisible ? (

@@ -414,9 +414,9 @@ export const Invoices = () => {
                             )}
 
                             {selectedOrder.asientos && (
-                                <div className="w-full flex justify-between">
+                                <div className="w-full flex justify-between items-center">
                                     <p className="text-lg font-medium">Asientos:</p>
-                                    <div className="flex gap-2">
+                                    <div className="flex flex-wrap gap-2 items-center">
                                         {JSON.parse(selectedOrder.asientos).map((asiento, index) => (
                                             <p key={index}>{asiento}</p>
                                         ))}
