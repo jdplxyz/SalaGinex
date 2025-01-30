@@ -21,7 +21,7 @@ export const Invoices = () => {
     const [dataSelected, setDataSelected] = useState(null);
     const [filteredOrders, setFilteredOrders] = useState([]);
     const token = localStorage.getItem('auth_token')
-    const {currencyRate,getRateCurrency} = useContext(CurrencyContext)
+    const {currencyRate} = useContext(CurrencyContext)
     const ordersPerPage = 2;
 
 

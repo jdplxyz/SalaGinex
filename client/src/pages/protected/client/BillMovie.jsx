@@ -25,11 +25,9 @@ export const BillMovie = () => {
   const pricePerCombo = 4;
   const navigate = useNavigate();
 
-  const { currencyRate, getRateCurrency } = useContext(CurrencyContext);
+  const { currencyRate } = useContext(CurrencyContext);
 
-  useEffect(() => {
-    getRateCurrency(1, "USD");
-  }, []);
+ 
 
   const getMovie = async () => {
     const response = await fetch(`${API_URL}/pelicula/${id}`, {
